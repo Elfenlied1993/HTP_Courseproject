@@ -13,5 +13,13 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual string Email { get; set; }
         public virtual int? RoleId { get; set; }
         public virtual Role Role { get; set; }
+        public virtual List<News> News { get; set; }
+        public virtual ICollection<Commentary> Commentaries { get; set; }
+
+        public User()
+        {
+            Commentaries=new List<Commentary>();
+            News = new List<News>();
+        }
     }
 }

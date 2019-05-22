@@ -8,11 +8,11 @@ namespace Course.ITnews.Data.Contracts.Entities
     {
         public virtual int Id { get; set; }
         public virtual string Title { get; set; }
-        public virtual List<User> Users { get; set; }
+        public virtual List<News> News { get; set; }
 
         public Category()
         {
-            Users = new List<User>();
+            News = new List<News>();
         }
     }
 }

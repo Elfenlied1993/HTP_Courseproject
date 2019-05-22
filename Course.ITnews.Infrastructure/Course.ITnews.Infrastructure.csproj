@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Course.ITnews.Data.EntityFramework\Course.ITnews.Data.EntityFramework.csproj" />
+    <ProjectReference Include="..\Course.ITnews.Domain.Services\Course.ITnews.Domain.Services.csproj" />
+  </ItemGroup>
+
 </Project>

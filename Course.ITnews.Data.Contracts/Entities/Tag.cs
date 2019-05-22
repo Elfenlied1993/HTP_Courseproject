@@ -8,11 +8,6 @@ namespace Course.ITnews.Data.Contracts.Entities
     {
         public virtual int Id { get; set; }
         public virtual string Title{ get; set; }
-        public virtual List<User> Users { get; set; }
-
-        public Tag()
-        {
-            Users = new List<User>();
-        }
+        public virtual ICollection<NewsTag> NewsTags { get; set; }
     }
 }

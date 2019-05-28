@@ -8,13 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Course.ITnews.Infrastructure
 {
-    class AppDataModule : Module
+    public class AppDataModule : Module
     {
-        public string ConnectionString { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UnitOfWork>()
                 .As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ApplicationDbContext>()
+                .As<ApplicationDbContext>()
+                .InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(Repository<>))
+                .As(typeof(IRepository<>))
                 .InstancePerLifetimeScope();
         }
     }

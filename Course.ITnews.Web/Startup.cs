@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Data.EntityFramework;
+using Course.ITnews.Domain.Contracts.ViewModels;
 using Course.ITnews.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,8 +34,10 @@ namespace Course.ITnews.Web
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -48,8 +51,10 @@ namespace Course.ITnews.Web
             containerBuilder.RegisterModule<AutoMapperModule>();
             containerBuilder.RegisterModule<AppDomainModule>();
             containerBuilder.RegisterModule<AppDataModule>();
+            containerBuilder.RegisterType<ApplicationDbContext>();
             containerBuilder.Populate(services);
             var container = containerBuilder.Build();
+            container.Resolve<UserManager<User>>();
             return new AutofacServiceProvider(container);
         }
 

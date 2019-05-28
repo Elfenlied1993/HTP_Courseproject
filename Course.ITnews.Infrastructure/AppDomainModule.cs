@@ -17,9 +17,6 @@ namespace Course.ITnews.Infrastructure
             builder.RegisterType<NewsService>()
                 .As<INewsService>()
                 .InstancePerLifetimeScope();
-            builder.RegisterType<UserService>()
-                .As<IUserService>()
-                .InstancePerLifetimeScope();
         }
     }
 }

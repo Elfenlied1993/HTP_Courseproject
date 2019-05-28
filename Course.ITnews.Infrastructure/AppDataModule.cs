@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac;
 using Course.ITnews.Data.Contracts;
+using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Data.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Course.ITnews.Infrastructure

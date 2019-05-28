@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Course.ITnews.Data.EntityFramework
 {
-    public class ApplicationDbContext:IdentityDbContext<User>
+    public class ApplicationDbContext:DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions)
         {
@@ -39,7 +39,6 @@ namespace Course.ITnews.Data.EntityFramework
             modelBuilder.ApplyConfiguration(new NewsEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NewsTagEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         }
 
         public override int SaveChanges()

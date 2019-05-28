@@ -20,20 +20,26 @@ namespace Course.ITnews.Data.EntityFramework
         public void Add<T>(T entity) where T : class
         {
             var repository = GetRepository<T>();
-            repository.Update(entity);
+            repository.Add(entity);
         }
 
-        public T Get<T>(int id) where T : class
+        public T Get<T>(string id) where T : class
         {
             var repository = GetRepository<T>();
             var result = repository.Get(id);
             return result;
         }
 
-        public void Remove<T>(int id) where T : class
+        public void Remove<T>(string id) where T : class
         {
             var repository = GetRepository<T>();
             repository.Remove(id);
+        }
+
+        public void Update<T>(T entity) where T : class
+        {
+            var repository = GetRepository<T>();
+            repository.Update(entity);
         }
 
         public void SaveChanges()

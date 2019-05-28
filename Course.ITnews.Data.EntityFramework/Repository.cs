@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.ITnews.Data.EntityFramework
 {
@@ -20,14 +21,14 @@ namespace Course.ITnews.Data.EntityFramework
             dbSet.Add(entity);
         }
 
-        public T Get(int id)
+        public T Get(string id)
         {
             var dbSet = dbContext.Set<T>();
             var result = dbSet.Find(id);
             return result;
         }
 
-        public void Remove(int id)
+        public void Remove(string id)
         {
             var dbSet = dbContext.Set<T>();
             var entity = dbSet.Find(id);
@@ -42,6 +43,7 @@ namespace Course.ITnews.Data.EntityFramework
 
         public void Update(T entity)
         {
+            dbContext.Entry(entity).State = EntityState.Modified;
             dbContext.Set<T>().Update(entity);
         }
     }

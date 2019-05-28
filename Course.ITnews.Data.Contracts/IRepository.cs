@@ -6,10 +6,10 @@ namespace Course.ITnews.Data.Contracts
 {
     public interface IRepository<T> where T : class
     {
-        T Get(int id);
+        T Get(string id);
         void Add(T entity);
         void Update(T entity);
-        void Remove(int id);
+        void Remove(string id);
         void SaveChanges();
     }
 }

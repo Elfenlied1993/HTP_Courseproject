@@ -7,7 +7,7 @@ namespace Course.ITnews.Data.Contracts.Entities
 {
     public class News
     {
-        public virtual int Id { get; set; }
+        public virtual string Id { get; set; }
         public virtual string Title { get; set; }
         public virtual string ShortDescription { get; set; }
         public virtual string FullDescription { get; set; }

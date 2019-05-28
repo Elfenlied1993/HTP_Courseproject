@@ -5,11 +5,11 @@ using Course.ITnews.Domain.Contracts.ViewModels;
 
 namespace Course.ITnews.Domain.Contracts
 {
-    public interface INewsService
+    public interface ICommentaryService
     {
-        NewsViewModel Get(string id);
-        void Add(NewsViewModel viewModel);
-        void Edit(NewsViewModel viewModel);
+        CommentaryViewModel Get(string id);
+        void Add(CommentaryViewModel viewModel);
+        void Edit(CommentaryViewModel viewModel);
         void Delete(string id);
     }
 }

@@ -6,7 +6,7 @@ namespace Course.ITnews.Data.Contracts.Entities
 {
     public class Commentary
     {
-        public virtual int Id { get; set; }
+        public virtual string Id { get; set; }
         public virtual string Title { get; set; }
         public virtual User Author { get; set; }
         public virtual string AuthorId { get; set; }

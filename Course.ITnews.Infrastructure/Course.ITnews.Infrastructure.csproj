@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Course.ITnews.Data.EntityFramework\Course.ITnews.Data.EntityFramework.csproj" />
     <ProjectReference Include="..\Course.ITnews.Domain.Services\Course.ITnews.Domain.Services.csproj" />
   </ItemGroup>

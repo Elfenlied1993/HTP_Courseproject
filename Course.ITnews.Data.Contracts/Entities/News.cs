@@ -15,7 +15,7 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual User Author { get; set; }
         public virtual string AuthorId { get; set; }
         public virtual Category Category { get; set; }
-        public virtual int? CategoryId { get; set; }
+        public virtual string CategoryId { get; set; }
         public virtual ICollection<NewsTag> NewsTags { get; set; }
         public virtual ICollection<Commentary> Commentaries { get; set; }
 

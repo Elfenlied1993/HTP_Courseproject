@@ -13,7 +13,7 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         [Required]
         public string Author { get; set; }
         [Required]
-        public int? AuthorId { get; set; }
+        public string AuthorId { get; set; }
         [Required]
         public string ShortDescription { get; set; }
         [Required]
@@ -23,14 +23,14 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         [Required]
         public string Category { get; set; }
         [Required]
-        public int? CategoryId { get; set; }
-        public ICollection<int> CommentariesIds { get; set; }
-        public ICollection<int> TagsIds { get; set; }
+        public string CategoryId { get; set; }
+        public ICollection<string> CommentariesIds { get; set; }
+        public ICollection<string> TagsIds { get; set; }
 
         public NewsViewModel()
         {
-            CommentariesIds=new List<int>();
-            TagsIds=new List<int>();
+            CommentariesIds=new List<string>();
+            TagsIds=new List<string>();
         }
     }
 }

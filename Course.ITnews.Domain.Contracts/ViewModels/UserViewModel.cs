@@ -8,12 +8,12 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
 {
     public class UserViewModel : IdentityUser
     {
-        public ICollection<int> NewsIds { get; set; }
-        public ICollection<int> CommentariesIds { get; set; }
+        public ICollection<string> NewsIds { get; set; }
+        public ICollection<string> CommentariesIds { get; set; }
         public UserViewModel()
         {
-            CommentariesIds = new List<int>();
-            NewsIds = new List<int>();
+            CommentariesIds = new List<string>();
+            NewsIds = new List<string>();
         }
     }
 }

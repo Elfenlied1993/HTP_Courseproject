@@ -11,7 +11,7 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual User Author { get; set; }
         public virtual string AuthorId { get; set; }
         public virtual News News { get; set; }
-        public virtual int? NewsId { get; set; }
+        public virtual string NewsId { get; set; }
         public virtual DateTime Created { get; set; }
         public virtual string Description { get; set; }
     }

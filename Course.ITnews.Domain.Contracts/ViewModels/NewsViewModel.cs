@@ -27,10 +27,5 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public ICollection<string> CommentariesIds { get; set; }
         public ICollection<string> TagsIds { get; set; }
 
-        public NewsViewModel()
-        {
-            CommentariesIds=new List<string>();
-            TagsIds=new List<string>();
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using Autofac;
 using Course.ITnews.Data.Contracts;
@@ -23,6 +24,13 @@ namespace Course.ITnews.Data.EntityFramework
             repository.Add(entity);
         }
 
+        public IEnumerable<T> FindByCondition<T>(Expression<Func<T, bool>> expression) where T : class
+        {
+            var repository = GetRepository<T>();
+            var result = repository.FindByCondition(expression);
+            return result;
+        }
+
         public T Get<T>(string id) where T : class
         {
             var repository = GetRepository<T>();
@@ -40,6 +48,13 @@ namespace Course.ITnews.Data.EntityFramework
         {
             var repository = GetRepository<T>();
             repository.Update(entity);
+        }
+
+        public IEnumerable<T> GetAll<T>() where T : class
+        {
+            var repository = GetRepository<T>();
+            var result = repository.GetAll();
+            return result;
         }
 
         public void SaveChanges()

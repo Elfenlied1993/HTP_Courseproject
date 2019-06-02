@@ -1,6 +1,8 @@
 ﻿using Course.ITnews.Data.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,16 @@ namespace Course.ITnews.Data.EntityFramework
         {
             var dbSet = dbContext.Set<T>();
             dbSet.Add(entity);
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+            return dbContext.Set<T>().ToList();
+        }
+
+        public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return dbContext.Set<T>().Where(expression).ToList();
         }
 
         public T Get(string id)

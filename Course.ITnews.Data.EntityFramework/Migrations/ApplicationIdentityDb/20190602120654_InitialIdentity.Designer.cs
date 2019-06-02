@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Course.ITnews.Data.EntityFramework.Migrations
+namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190528091730_ChangingIds")]
-    partial class ChangingIds
+    [DbContext(typeof(ApplicationIdentityDbContext))]
+    [Migration("20190602120654_InitialIdentity")]
+    partial class InitialIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,12 +26,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Commentary", b =>
@@ -43,13 +42,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description")
-                        .IsRequired();
+                    b.Property<string>("Description");
 
                     b.Property<string>("NewsId");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -57,7 +54,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.HasIndex("NewsId");
 
-                    b.ToTable("Commentaries");
+                    b.ToTable("Commentary");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
@@ -71,14 +68,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("FullDescription")
-                        .IsRequired();
+                    b.Property<string>("FullDescription");
 
-                    b.Property<string>("ShortDescription")
-                        .IsRequired();
+                    b.Property<string>("ShortDescription");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
@@ -91,15 +85,20 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.NewsTag", b =>
                 {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("NewsId");
 
                     b.Property<string>("TagId");
 
-                    b.HasKey("NewsId", "TagId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsId");
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("NewsTags");
+                    b.ToTable("NewsTag");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Tag", b =>
@@ -111,7 +110,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.User", b =>
@@ -301,13 +300,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.News", "News")
                         .WithMany("NewsTags")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("NewsId");
 
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.Tag", "Tag")
                         .WithMany("NewsTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

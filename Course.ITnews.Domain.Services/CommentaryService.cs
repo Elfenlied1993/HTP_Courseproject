@@ -21,9 +21,20 @@ namespace Course.ITnews.Domain.Services
         }
 
 
+        public IEnumerable<CommentaryViewModel> GetAll()
+        {
+            IEnumerable<Commentary> commentaries = unitOfWork.GetAll<Commentary>();
+            var result = mapper.Map<IEnumerable<CommentaryViewModel>>(commentaries);
+            return result;
+        }
+
         public CommentaryViewModel Get(string id)
         {
             Commentary commentary = unitOfWork.Get<Commentary>(id);
+            var news = unitOfWork.Get<News>(commentary.NewsId);
+            commentary.News = news;
+            var author = unitOfWork.Get<User>(commentary.AuthorId);
+            commentary.Author = author;
             var result = mapper.Map<CommentaryViewModel>(commentary);
             return result;
         }
@@ -31,6 +42,10 @@ namespace Course.ITnews.Domain.Services
         public void Add(CommentaryViewModel viewModel)
         {
             var result = mapper.Map<Commentary>(viewModel);
+            var news = unitOfWork.Get<News>(result.NewsId);
+            result.News = news;
+            var author = unitOfWork.Get<User>(result.AuthorId);
+            result.Author = author;
             unitOfWork.Add(result);
             unitOfWork.SaveChanges();
         }
@@ -38,6 +53,8 @@ namespace Course.ITnews.Domain.Services
         public void Edit(CommentaryViewModel viewModel)
         {
             Commentary commentary = unitOfWork.Get<Commentary>(viewModel.Id);
+            commentary.Author = unitOfWork.Get<User>(viewModel.AuthorId);
+            commentary.News = unitOfWork.Get<News>(viewModel.NewsId);
             mapper.Map(viewModel, commentary);
             unitOfWork.Update(commentary);
             unitOfWork.SaveChanges();

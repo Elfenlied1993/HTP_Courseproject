@@ -11,10 +11,5 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual List<News> News { get; set; }
         public virtual ICollection<Commentary> Commentaries { get; set; }
 
-        public User()
-        {
-            Commentaries=new List<Commentary>();
-            News = new List<News>();
-        }
     }
 }

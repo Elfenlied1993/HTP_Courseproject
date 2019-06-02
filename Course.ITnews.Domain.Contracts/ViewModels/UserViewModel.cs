@@ -10,10 +10,6 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
     {
         public ICollection<string> NewsIds { get; set; }
         public ICollection<string> CommentariesIds { get; set; }
-        public UserViewModel()
-        {
-            CommentariesIds = new List<string>();
-            NewsIds = new List<string>();
-        }
+
     }
 }

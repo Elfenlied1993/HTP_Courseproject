@@ -7,6 +7,7 @@ namespace Course.ITnews.Domain.Contracts
 {
     public interface ICommentaryService
     {
+        IEnumerable<CommentaryViewModel> GetAll();
         CommentaryViewModel Get(string id);
         void Add(CommentaryViewModel viewModel);
         void Edit(CommentaryViewModel viewModel);

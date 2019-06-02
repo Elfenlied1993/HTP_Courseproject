@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel>
+@{
+    ViewBag.Title = "News";
+}
+
+<h2>News</h2>
+@foreach (var item in Model)
+{
+    <div class="card">
+        <div class="card-header">
+           @Html.DisplayFor(modelItem=>item.Author)
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayFor(modelItem=>item.Title)</h5>
+            <p class="card-text">@Html.DisplayFor(modelItem=>item.ShortDescription)</p>
+            <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Show more</a>
+        </div>
+    </div>
+}

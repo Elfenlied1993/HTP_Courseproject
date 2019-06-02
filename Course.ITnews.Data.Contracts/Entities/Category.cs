@@ -10,9 +10,5 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual string Title { get; set; }
         public virtual List<News> News { get; set; }
 
-        public Category()
-        {
-            News = new List<News>();
-        }
     }
 }

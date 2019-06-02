@@ -6,10 +6,10 @@ namespace Course.ITnews.Data.Contracts.Entities
 {
     public class NewsTag
     {
-        public string Id { get; set; }
-        public string NewsId { get; set; }
+        public int Id { get; set; }
+        public int NewsId { get; set; }
         public News News { get; set; }
-        public string TagId { get; set; }
+        public int TagId { get; set; }
         public Tag Tag { get; set; }
     }
 }

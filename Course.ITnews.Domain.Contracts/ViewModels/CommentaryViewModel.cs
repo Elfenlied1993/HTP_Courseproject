@@ -7,15 +7,15 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
 {
     public class CommentaryViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public string AuthorName { get; set; }
         [Required]
-        public string AuthorId { get; set; }
+        public int AuthorId { get; set; }
         [Required]
-        public string NewsId { get; set; }
+        public int NewsId { get; set; }
         [Required]
         public DateTime Created { get; set; }
         [Required]

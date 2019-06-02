@@ -31,14 +31,14 @@ namespace Course.ITnews.Data.EntityFramework
             return result;
         }
 
-        public T Get<T>(string id) where T : class
+        public T Get<T>(int id) where T : class
         {
             var repository = GetRepository<T>();
             var result = repository.Get(id);
             return result;
         }
 
-        public void Remove<T>(string id) where T : class
+        public void Remove<T>(int id) where T : class
         {
             var repository = GetRepository<T>();
             repository.Remove(id);

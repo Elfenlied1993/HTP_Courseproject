@@ -29,18 +29,18 @@ namespace Course.ITnews.Domain.Services
         }
 
 
-        public NewsViewModel Get(string id)
+        public NewsViewModel Get(int id)
         {
             News news = unitOfWork.Get<News>(id);
-            Category category = unitOfWork.Get<Category>(news.CategoryId);
+            Category category = unitOfWork.Get<Category>(news.CategoryId.GetValueOrDefault());
             news.Category = category;
-            User user = unitOfWork.Get<User>(news.AuthorId);
+            User user = unitOfWork.Get<User>(news.AuthorId.GetValueOrDefault());
             news.Author = user;
             var result = mapper.Map<NewsViewModel>(news); 
             var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
             var commentaries = unitOfWork.FindByCondition<Commentary>(x => x.NewsId == news.Id);
-            result.TagsIds = new List<string>();
-            result.CommentariesIds = new List<string>();
+            result.TagsIds = new List<int>();
+            result.CommentariesIds = new List<int>();
             foreach (var tag in tags)
             {
                 result.TagsIds.Add(tag.TagId);
@@ -55,14 +55,14 @@ namespace Course.ITnews.Domain.Services
         public void Add(NewsViewModel viewModel)
         {
             var result = mapper.Map<News>(viewModel);
-            var category = unitOfWork.Get<Category>(result.CategoryId);
+            var category = unitOfWork.Get<Category>(result.CategoryId.GetValueOrDefault());
             result.Category = category;
-            var author = unitOfWork.Get<User>(result.AuthorId);
+            var author = unitOfWork.Get<User>(result.AuthorId.GetValueOrDefault());
             result.Author = author;
             result.NewsTags = new List<NewsTag>();
             if (viewModel.TagsIds != null)
             {
-                foreach (string tagId in viewModel.TagsIds)
+                foreach (int tagId in viewModel.TagsIds)
                 {
                     var newsTag = new NewsTag() {NewsId = result.Id, TagId = tagId};
                     result.NewsTags.Add(newsTag);
@@ -126,7 +126,7 @@ namespace Course.ITnews.Domain.Services
             unitOfWork.SaveChanges();
         }
 
-        public void Delete(string id)
+        public void Delete(int id)
         {
             News news = unitOfWork.Get<News>(id);
             unitOfWork.Remove<News>(id);

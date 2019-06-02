@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Course.ITnews.Data.EntityFramework.EntityConfigurations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Course.ITnews.Data.EntityFramework
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext: IdentityDbContext<User, IdentityRole<int>, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions)
         {
@@ -20,12 +21,12 @@ namespace Course.ITnews.Data.EntityFramework
         {
         }
 
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Commentary> Commentaries { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<Tag> Tags { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
@@ -39,6 +40,7 @@ namespace Course.ITnews.Data.EntityFramework
             modelBuilder.ApplyConfiguration(new NewsEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NewsTagEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         }
 
         public override int SaveChanges()

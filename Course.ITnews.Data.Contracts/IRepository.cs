@@ -9,10 +9,10 @@ namespace Course.ITnews.Data.Contracts
     {
         IEnumerable<T> GetAll();
         IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
-        T Get(string id);
+        T Get(int id);
         void Add(T entity);
         void Update(T entity);
-        void Remove(string id);
+        void Remove(int id);
         void SaveChanges();
     }
 }

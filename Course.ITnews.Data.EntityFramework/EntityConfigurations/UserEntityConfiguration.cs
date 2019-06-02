@@ -11,7 +11,7 @@ namespace Course.ITnews.Data.EntityFramework.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(x => x.Id);
+            //builder.HasKey(x => x.Id);
         }
     }
 }

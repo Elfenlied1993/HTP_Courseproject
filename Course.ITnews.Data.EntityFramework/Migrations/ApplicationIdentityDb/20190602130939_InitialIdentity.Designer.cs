@@ -4,14 +4,16 @@ using Course.ITnews.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190602130939_InitialIdentity")]
+    partial class InitialIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Commentary", b =>
@@ -54,7 +56,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasIndex("NewsId");
 
-                    b.ToTable("Commentaries");
+                    b.ToTable("Commentary");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
@@ -100,7 +102,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("NewsTags");
+                    b.ToTable("NewsTag");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Tag", b =>
@@ -113,7 +115,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.User", b =>

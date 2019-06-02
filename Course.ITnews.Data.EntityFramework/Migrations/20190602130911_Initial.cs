@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
@@ -11,7 +12,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -23,7 +25,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "Tags",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -35,7 +38,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserName = table.Column<string>(nullable: true),
                     NormalizedUserName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
@@ -60,13 +64,14 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "News",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: false),
                     ShortDescription = table.Column<string>(nullable: false),
                     FullDescription = table.Column<string>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
-                    AuthorId = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<string>(nullable: true)
+                    AuthorId = table.Column<int>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -89,10 +94,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "Commentaries",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: false),
-                    AuthorId = table.Column<string>(nullable: true),
-                    NewsId = table.Column<string>(nullable: true),
+                    AuthorId = table.Column<int>(nullable: true),
+                    NewsId = table.Column<int>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: false)
                 },
@@ -117,8 +123,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "NewsTags",
                 columns: table => new
                 {
-                    NewsId = table.Column<string>(nullable: false),
-                    TagId = table.Column<string>(nullable: false)
+                    NewsId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

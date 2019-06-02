@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190602120244_Initial")]
+    [Migration("20190602130911_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,8 +23,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Title")
                         .IsRequired();
@@ -36,17 +37,18 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Commentary", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId");
+                    b.Property<int?>("AuthorId");
 
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("Description")
                         .IsRequired();
 
-                    b.Property<string>("NewsId");
+                    b.Property<int?>("NewsId");
 
                     b.Property<string>("Title")
                         .IsRequired();
@@ -62,12 +64,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId");
+                    b.Property<int?>("AuthorId");
 
-                    b.Property<string>("CategoryId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<DateTime>("Created");
 
@@ -91,9 +94,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.NewsTag", b =>
                 {
-                    b.Property<string>("NewsId");
+                    b.Property<int>("NewsId");
 
-                    b.Property<string>("TagId");
+                    b.Property<int>("TagId");
 
                     b.HasKey("NewsId", "TagId");
 
@@ -104,8 +107,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Tag", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Title");
 
@@ -116,8 +120,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount");
 

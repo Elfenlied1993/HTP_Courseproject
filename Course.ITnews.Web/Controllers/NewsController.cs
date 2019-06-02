@@ -23,13 +23,8 @@ namespace Course.ITnews.Web.Controllers
             return View(newsService.GetAll().ToList());
         }
         //GET News/Edit/1
-        public IActionResult Edit(string id)
+        public IActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
             NewsViewModel viewModel = newsService.Get(id);
             if (viewModel == null)
             {
@@ -41,7 +36,7 @@ namespace Course.ITnews.Web.Controllers
         //POST News/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(string id, NewsViewModel viewModel)
+        public IActionResult Edit(int id, NewsViewModel viewModel)
         {
             if (id != viewModel.Id)
             {

@@ -4,14 +4,16 @@ using Course.ITnews.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190602133200_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -42,11 +45,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
                     b.Property<int?>("NewsId");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -69,11 +74,14 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("FullDescription");
+                    b.Property<string>("FullDescription")
+                        .IsRequired();
 
-                    b.Property<string>("ShortDescription");
+                    b.Property<string>("ShortDescription")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -86,17 +94,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.NewsTag", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("NewsId");
 
                     b.Property<int>("TagId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsId");
+                    b.HasKey("NewsId", "TagId");
 
                     b.HasIndex("TagId");
 

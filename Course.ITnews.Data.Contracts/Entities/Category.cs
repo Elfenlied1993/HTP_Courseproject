@@ -6,7 +6,7 @@ namespace Course.ITnews.Data.Contracts.Entities
 {
     public class Category
     {
-        public virtual string Id { get; set; }
+        public virtual int Id { get; set; }
         public virtual string Title { get; set; }
         public virtual List<News> News { get; set; }
 

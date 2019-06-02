@@ -8,9 +8,9 @@ namespace Course.ITnews.Domain.Contracts
     public interface ICommentaryService
     {
         IEnumerable<CommentaryViewModel> GetAll();
-        CommentaryViewModel Get(string id);
+        CommentaryViewModel Get(int id);
         void Add(CommentaryViewModel viewModel);
         void Edit(CommentaryViewModel viewModel);
-        void Delete(string id);
+        void Delete(int id);
     }
 }

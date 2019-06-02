@@ -7,13 +7,13 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
 {
     public class NewsViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public string Author { get; set; }
         [Required]
-        public string AuthorId { get; set; }
+        public int AuthorId { get; set; }
         [Required]
         public string ShortDescription { get; set; }
         [Required]
@@ -23,9 +23,9 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         [Required]
         public string Category { get; set; }
         [Required]
-        public string CategoryId { get; set; }
-        public ICollection<string> CommentariesIds { get; set; }
-        public ICollection<string> TagsIds { get; set; }
+        public int CategoryId { get; set; }
+        public ICollection<int> CommentariesIds { get; set; }
+        public ICollection<int> TagsIds { get; set; }
 
     }
 }

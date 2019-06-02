@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 {
-    [DbContext(typeof(ApplicationIdentityDbContext))]
-    [Migration("20190602120654_InitialIdentity")]
-    partial class InitialIdentity
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20190602132504_InitialIdentity_v2")]
+    partial class InitialIdentity_v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,28 +23,30 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Commentary", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId");
+                    b.Property<int?>("AuthorId");
 
                     b.Property<DateTime>("Created");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("NewsId");
+                    b.Property<int?>("NewsId");
 
                     b.Property<string>("Title");
 
@@ -54,17 +56,18 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasIndex("NewsId");
 
-                    b.ToTable("Commentary");
+                    b.ToTable("Commentaries");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId");
+                    b.Property<int?>("AuthorId");
 
-                    b.Property<string>("CategoryId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<DateTime>("Created");
 
@@ -85,12 +88,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.NewsTag", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("NewsId");
+                    b.Property<int>("NewsId");
 
-                    b.Property<string>("TagId");
+                    b.Property<int>("TagId");
 
                     b.HasKey("Id");
 
@@ -98,25 +102,27 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("NewsTag");
+                    b.ToTable("NewsTags");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Tag", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount");
 
@@ -164,10 +170,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -188,7 +195,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,8 +205,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<int>("RoleId");
 
                     b.HasKey("Id");
 
@@ -208,7 +214,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -218,8 +224,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -228,7 +233,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -236,8 +241,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<int>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -246,11 +250,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
 
-                    b.Property<string>("RoleId");
+                    b.Property<int>("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -259,9 +263,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -300,22 +304,24 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.News", "News")
                         .WithMany("NewsTags")
-                        .HasForeignKey("NewsId");
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.Tag", "Tag")
                         .WithMany("NewsTags")
-                        .HasForeignKey("TagId");
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.User")
                         .WithMany()
@@ -323,7 +329,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.User")
                         .WithMany()
@@ -331,9 +337,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -344,7 +350,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.User")
                         .WithMany()

@@ -28,12 +28,12 @@ namespace Course.ITnews.Domain.Services
             return result;
         }
 
-        public CommentaryViewModel Get(string id)
+        public CommentaryViewModel Get(int id)
         {
             Commentary commentary = unitOfWork.Get<Commentary>(id);
-            var news = unitOfWork.Get<News>(commentary.NewsId);
+            var news = unitOfWork.Get<News>(commentary.NewsId.GetValueOrDefault());
             commentary.News = news;
-            var author = unitOfWork.Get<User>(commentary.AuthorId);
+            var author = unitOfWork.Get<User>(commentary.AuthorId.GetValueOrDefault());
             commentary.Author = author;
             var result = mapper.Map<CommentaryViewModel>(commentary);
             return result;
@@ -42,9 +42,9 @@ namespace Course.ITnews.Domain.Services
         public void Add(CommentaryViewModel viewModel)
         {
             var result = mapper.Map<Commentary>(viewModel);
-            var news = unitOfWork.Get<News>(result.NewsId);
+            var news = unitOfWork.Get<News>(result.NewsId.GetValueOrDefault());
             result.News = news;
-            var author = unitOfWork.Get<User>(result.AuthorId);
+            var author = unitOfWork.Get<User>(result.AuthorId.GetValueOrDefault());
             result.Author = author;
             unitOfWork.Add(result);
             unitOfWork.SaveChanges();
@@ -60,7 +60,7 @@ namespace Course.ITnews.Domain.Services
             unitOfWork.SaveChanges();
         }
 
-        public void Delete(string id)
+        public void Delete(int id)
         {
             Commentary commentary = unitOfWork.Get<Commentary>(id);
             unitOfWork.Remove<Commentary>(id);

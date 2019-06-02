@@ -9,9 +9,9 @@ namespace Course.ITnews.Data.Contracts
     {
         void SaveChanges();
         IEnumerable<T> FindByCondition<T>(Expression<Func<T, bool>> expression) where T :class;
-        T Get<T>(string id) where T : class;
+        T Get<T>(int id) where T : class;
         void Add<T>(T entity) where T : class;
-        void Remove<T>(string id) where T : class;
+        void Remove<T>(int id) where T : class;
         void Update<T>(T entity) where T : class;
         IEnumerable<T> GetAll<T>() where T : class;
     }

@@ -9,9 +9,9 @@ namespace Course.ITnews.Domain.Contracts
     public interface INewsService
     {
         IEnumerable<NewsViewModel> GetAll();
-        NewsViewModel Get(string id);
+        NewsViewModel Get(int id);
         void Add(NewsViewModel viewModel);
         void Edit(NewsViewModel viewModel);
-        void Delete(string id);
+        void Delete(int id);
     }
 }

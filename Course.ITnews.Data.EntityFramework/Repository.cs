@@ -33,14 +33,14 @@ namespace Course.ITnews.Data.EntityFramework
             return dbContext.Set<T>().Where(expression).ToList();
         }
 
-        public T Get(string id)
+        public T Get(int id)
         {
             var dbSet = dbContext.Set<T>();
             var result = dbSet.Find(id);
             return result;
         }
 
-        public void Remove(string id)
+        public void Remove(int id)
         {
             var dbSet = dbContext.Set<T>();
             var entity = dbSet.Find(id);

@@ -8,8 +8,8 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
 {
     public class UserViewModel : IdentityUser
     {
-        public ICollection<string> NewsIds { get; set; }
-        public ICollection<string> CommentariesIds { get; set; }
+        public ICollection<int> NewsIds { get; set; }
+        public ICollection<int> CommentariesIds { get; set; }
 
     }
 }

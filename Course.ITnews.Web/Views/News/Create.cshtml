@@ -4,8 +4,12 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<script src="https://select2.org/assets/db8d1316d82fbadb18dde3096cf9e671.js"></script>
+
 <h1>Create</h1>
 
 <h4>News</h4>
@@ -28,20 +32,24 @@
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <p>
+                <label asp-for="TagsIds" class="control-label">Input tags:</label>
+                <select asp-for="TagsIds" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags">
+                </select>
+                <span asp-validation-for="TagsIds" class="text-danger"></span>
+            </p>
+        </div>
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
         <textarea id="full-description" style="display: none" asp-for="FullDescription"></textarea>
-        <script>
-            var easyMDE = new EasyMDE({
-                autoDownloadFontAwesome: true,
-                element: document.getElementById('full-description'),
-                initialValue: '*Write your text here.*',
-            });
-        </script>
+
         <div class="form-group">
             <label asp-for="ShortDescription" class="control-label">Enter your short description here:</label>
             <textarea asp-for="ShortDescription" class="form-control"></textarea>
             <span asp-validation-for="ShortDescription" class="text-danger"></span>
         </div>
+        <pre data-fill-from=".js-code-example-tokenizer"></pre>
+
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />
         </div>
@@ -51,3 +59,17 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script type="text/javascript" class="js-code-example-tokenizer">
+
+    $(".js-example-tokenizer").select2({
+        tags: true,
+        tokenSeparators: [',', ' ']
+    })
+</script>
+<script type="text/javascript">
+    var easyMDE = new EasyMDE({
+        autoDownloadFontAwesome: true,
+        element: document.getElementById('full-description'),
+        initialValue: '*Write your text here.*',
+    });
+</script>

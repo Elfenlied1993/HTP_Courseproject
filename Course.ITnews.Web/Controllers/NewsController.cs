@@ -55,8 +55,6 @@ namespace Course.ITnews.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                viewModel.AuthorId = currentUser.Id;
                 newsService.Edit(viewModel);
                 return RedirectToAction("Index");
             }

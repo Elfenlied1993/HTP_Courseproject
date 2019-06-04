@@ -12,11 +12,8 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public string Title { get; set; }
         [Required]
         public string AuthorName { get; set; }
-        [Required]
         public int AuthorId { get; set; }
-        [Required]
         public int NewsId { get; set; }
-        [Required]
         public DateTime Created { get; set; }
         [Required]
         public string Description { get; set; }

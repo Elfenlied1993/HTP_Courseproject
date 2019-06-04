@@ -10,15 +10,12 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
-        [Required]
         public string Author { get; set; }
-        [Required]
         public int AuthorId { get; set; }
         [Required]
         public string ShortDescription { get; set; }
         [Required]
         public string FullDescription { get; set; }
-        [Required]
         public DateTime Created { get; set; }
         [Required]
         public string Category { get; set; }

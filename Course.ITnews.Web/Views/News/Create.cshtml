@@ -1,0 +1,50 @@
+﻿@model Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<h1>Create</h1>
+
+<h4>News</h4>
+<hr />
+
+<div class="col-md-12">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Created" type="hidden" value="@DateTime.Now">
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Category" class="control-label">Choose the category:</label>
+            <select asp-for="Category" class="form-control" />
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+        <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
+        <textarea id="full-description" style="display: none" asp-for="FullDescription"></textarea>
+        <script>
+            var easyMDE = new EasyMDE({
+                autoDownloadFontAwesome: true,
+                element: document.getElementById('full-description'),
+                initialValue: '*Write your text here.*',
+            });
+        </script>
+        <div class="form-group">
+            <label asp-for="ShortDescription" class="control-label">Enter your short description here:</label>
+            <textarea asp-for="ShortDescription" class="form-control" ></textarea>
+            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

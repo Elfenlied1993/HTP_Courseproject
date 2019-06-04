@@ -28,6 +28,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Course.ITnews.Data.Contracts\Course.ITnews.Data.Contracts.csproj" />
     <ProjectReference Include="..\Course.ITnews.Infrastructure\Course.ITnews.Infrastructure.csproj" />
   </ItemGroup>
 

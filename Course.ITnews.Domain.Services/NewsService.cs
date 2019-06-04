@@ -14,7 +14,7 @@ namespace Course.ITnews.Domain.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-
+        
         public NewsService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
@@ -25,6 +25,11 @@ namespace Course.ITnews.Domain.Services
         {
             IEnumerable<News> news = unitOfWork.GetAll<News>();
             var result = mapper.Map<IEnumerable<NewsViewModel>>(news);
+            foreach (var post in result)
+            {
+                User user = unitOfWork.Get<User>(post.AuthorId);
+                post.Author = user.UserName;
+            }
             return result;
         }
 
@@ -132,5 +137,27 @@ namespace Course.ITnews.Domain.Services
             unitOfWork.Remove<News>(id);
             unitOfWork.SaveChanges();
         }
+
+        public List<SelectListItem> GetCategories()
+        {
+            var categories = new List<SelectListItem>();
+            foreach (var category in unitOfWork.GetAll<Category>())
+            {
+                categories.Add(new SelectListItem(){Value = category.Id.ToString(),Text = category.Title});
+            }
+            return categories;
+        }
+        public List<SelectListItem> GetTags()
+        {
+            var tags = new List<SelectListItem>();
+            foreach (var tag in unitOfWork.GetAll<Tag>())
+            {
+                tags.Add(new SelectListItem(){Value = tag.Id.ToString(),Text = tag.Title});
+            }
+
+            return tags;
+        }
+
+       
     }
 }

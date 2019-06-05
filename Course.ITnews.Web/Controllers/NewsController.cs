@@ -8,6 +8,7 @@ using Course.ITnews.Domain.Contracts;
 using Course.ITnews.Domain.Contracts.ViewModels;
 using Course.ITnews.Web.Models;
 using Markdig;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Course.ITnews.Web.Controllers
 {
+    [Authorize]
     public class NewsController : Controller
     {
         private readonly UserManager<User> userManager;

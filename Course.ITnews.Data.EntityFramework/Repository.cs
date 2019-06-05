@@ -21,6 +21,7 @@ namespace Course.ITnews.Data.EntityFramework
         {
             var dbSet = dbContext.Set<T>();
             dbSet.Add(entity);
+            SaveChanges();
         }
 
         public IEnumerable<T> GetAll()
@@ -57,6 +58,7 @@ namespace Course.ITnews.Data.EntityFramework
         {
             dbContext.Entry(entity).State = EntityState.Modified;
             dbContext.Set<T>().Update(entity);
+            SaveChanges();
         }
     }
 }

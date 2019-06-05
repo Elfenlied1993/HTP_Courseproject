@@ -20,8 +20,6 @@ namespace Course.ITnews.Data.EntityFramework
         public ApplicationDbContext()
         {
         }
-
-
         public DbSet<Category> Categories { get; set; }
         public DbSet<Commentary> Commentaries { get; set; }
         public DbSet<News> News { get; set; }

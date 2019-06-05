@@ -1,4 +1,5 @@
-﻿@model Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -36,11 +37,11 @@
         </div>
         <div class="form-group">
             <p>
-                <label asp-for="TagsIds" class="control-label">Input tags:</label>
-                <select asp-for="TagsIds" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
-                <span asp-validation-for="TagsIds" class="text-danger"></span>
-                </p>
+
+                <select asp-for="TagsTitles" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
+            </p>
         </div>
+        <input asp-for="Tags" type="hidden" />
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
         <textarea id="full-description" style="display: none" asp-for="FullDescription"></textarea>
 
@@ -65,12 +66,12 @@
     $(".js-example-tokenizer").select2({
         tags: true,
         tokenSeparators: [',', ' ']
-    })
-</script>
-<script type="text/javascript">
-    var easyMDE = new EasyMDE({
-        autoDownloadFontAwesome: true,
-        element: document.getElementById('full-description'),
-        initialValue: '*Write your text here.*',
     });
 </script>
+        <script type="text/javascript">
+            var easyMDE = new EasyMDE({
+                autoDownloadFontAwesome: true,
+                element: document.getElementById('full-description'),
+                initialValue: '*Write your text here.*',
+            });
+        </script>

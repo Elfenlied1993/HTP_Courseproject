@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using AutoMapper;
 using Course.ITnews.Data.Contracts;
@@ -59,6 +60,7 @@ namespace Course.ITnews.Domain.Services
         }
         public void Add(NewsViewModel viewModel)
         {
+            viewModel = Tags(viewModel);
             var result = mapper.Map<News>(viewModel);
             var category = unitOfWork.Get<Category>(result.CategoryId.GetValueOrDefault());
             result.Category = category;
@@ -90,7 +92,9 @@ namespace Course.ITnews.Domain.Services
 
         public void Edit(NewsViewModel viewModel)
         {
+            viewModel = Tags(viewModel);
             News news = unitOfWork.Get<News>(viewModel.Id);
+
             mapper.Map(viewModel, news);
             news.Category = unitOfWork.Get<Category>(viewModel.CategoryId);
             news.Author = unitOfWork.Get<User>(viewModel.AuthorId);
@@ -147,12 +151,37 @@ namespace Course.ITnews.Domain.Services
             }
             return categories;
         }
+
+        public NewsViewModel Tags(NewsViewModel viewModel)
+        {
+            var tempList = unitOfWork.GetAll<Tag>();
+            viewModel.TagsIds = new List<int>();
+            foreach (var title in viewModel.TagsTitles)
+            {
+                var tag = tempList.FirstOrDefault(x => x.Title == title);
+                    if (tag!=null)
+                    {
+                        viewModel.TagsIds.Add(tag.Id);
+                    }
+                    else
+                    {
+                        Tag tempTag = new Tag(){Title = title};
+                        unitOfWork.Add<Tag>(tempTag);
+                        var newTag = unitOfWork.FindByCondition<Tag>(x => x.Title == tempTag.Title);
+                        foreach (var newId in newTag)
+                        {
+                                viewModel.TagsIds.Add(newId.Id);
+                        }
+                }
+            }
+            return viewModel;
+        }
         public List<SelectListItem> GetTags()
         {
             var tags = new List<SelectListItem>();
             foreach (var tag in unitOfWork.GetAll<Tag>())
             {
-                tags.Add(new SelectListItem(){Value = tag.Id.ToString(),Text = tag.Title});
+                tags.Add(new SelectListItem(){Value = tag.Title,Text = tag.Title});
             }
 
             return tags;

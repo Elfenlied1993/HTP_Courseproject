@@ -34,10 +34,8 @@
         </div>
         <div class="form-group">
             <p>
-                <label asp-for="TagsIds" class="control-label">Input tags:</label>
-                <select asp-for="TagsIds" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags">
-                </select>
-                <span asp-validation-for="TagsIds" class="text-danger"></span>
+
+                <select asp-for="TagsTitles" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
             </p>
         </div>
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>

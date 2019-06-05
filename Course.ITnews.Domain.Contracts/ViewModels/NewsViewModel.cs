@@ -25,6 +25,7 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public ICollection<int> TagsIds { get; set; }
         public List<SelectListItem> Commentaries { get; set; }
         public List<SelectListItem> Tags { get; set; }
+        public ICollection<string> TagsTitles { get; set; }
         public List<SelectListItem> Categories { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Course.ITnews.Domain.Contracts
         void Edit(NewsViewModel viewModel);
         void Delete(int id);
         List<SelectListItem> GetCategories();
+        NewsViewModel GetTagsTitles(NewsViewModel viewModel);
         List<SelectListItem> GetTags();
     }
 }

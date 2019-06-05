@@ -78,6 +78,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.Property<string>("ShortDescription")
                         .IsRequired();
 
+                    b.Property<int>("Status");
+
                     b.Property<string>("Title")
                         .IsRequired();
 

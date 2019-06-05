@@ -18,5 +18,14 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual int? CategoryId { get; set; }
         public virtual ICollection<NewsTag> NewsTags { get; set; }
         public virtual ICollection<Commentary> Commentaries { get; set; }
+        public virtual NewsStatus Status { get; set; }
+    }
+
+    public enum NewsStatus
+    {
+        Submitted,
+        Approved,
+        Rejected
     }
 }
+

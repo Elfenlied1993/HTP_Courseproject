@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
+namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class InitialIdentity : Migration
+    public partial class Status : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,20 +50,20 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "Tags",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -72,7 +72,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,12 +187,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    ShortDescription = table.Column<string>(nullable: true),
-                    FullDescription = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: false),
+                    ShortDescription = table.Column<string>(nullable: false),
+                    FullDescription = table.Column<string>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     AuthorId = table.Column<int>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true)
+                    CategoryId = table.Column<int>(nullable: true),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,36 +205,36 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_News_Category_CategoryId",
+                        name: "FK_News_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Commentary",
+                name: "Commentaries",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: false),
                     AuthorId = table.Column<int>(nullable: true),
                     NewsId = table.Column<int>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Commentary", x => x.Id);
+                    table.PrimaryKey("PK_Commentaries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Commentary_AspNetUsers_AuthorId",
+                        name: "FK_Commentaries_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Commentary_News_NewsId",
+                        name: "FK_Commentaries_News_NewsId",
                         column: x => x.NewsId,
                         principalTable: "News",
                         principalColumn: "Id",
@@ -241,27 +242,25 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "NewsTag",
+                name: "NewsTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     NewsId = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NewsTag", x => x.Id);
+                    table.PrimaryKey("PK_NewsTags", x => new { x.NewsId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_NewsTag_News_NewsId",
+                        name: "FK_NewsTags_News_NewsId",
                         column: x => x.NewsId,
                         principalTable: "News",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NewsTag_Tag_TagId",
+                        name: "FK_NewsTags_Tags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tag",
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -306,13 +305,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commentary_AuthorId",
-                table: "Commentary",
+                name: "IX_Commentaries_AuthorId",
+                table: "Commentaries",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commentary_NewsId",
-                table: "Commentary",
+                name: "IX_Commentaries_NewsId",
+                table: "Commentaries",
                 column: "NewsId");
 
             migrationBuilder.CreateIndex(
@@ -326,13 +325,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NewsTag_NewsId",
-                table: "NewsTag",
-                column: "NewsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NewsTag_TagId",
-                table: "NewsTag",
+                name: "IX_NewsTags_TagId",
+                table: "NewsTags",
                 column: "TagId");
         }
 
@@ -354,10 +348,10 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Commentary");
+                name: "Commentaries");
 
             migrationBuilder.DropTable(
-                name: "NewsTag");
+                name: "NewsTags");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -366,13 +360,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations.ApplicationIdentityDb
                 name: "News");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
                 .ForMember(dest=>dest.CategoryId,c=>c.MapFrom(src=>src.CategoryId))
                 .ForMember(dest=>dest.FullDescription,c=>c.MapFrom(src=>src.FullDescription))
                 .ForMember(dest=>dest.ShortDescription,c=>c.MapFrom(src=>src.ShortDescription))
+                .ForMember(dest=>dest.Status,c=>c.MapFrom(src=>src.Status))
                 .ForMember(dest=>dest.Created,c=>c.MapFrom(src=>src.Created))
                 .ForMember(dest=>dest.Title,c=>c.MapFrom(src=>src.Title))
                 .ForAllOtherMembers(c=>c.Ignore());
@@ -38,6 +39,7 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
                 .ForMember(dest => dest.CategoryId, c => c.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.FullDescription, c => c.MapFrom(src => src.FullDescription))
                 .ForMember(dest => dest.ShortDescription, c => c.MapFrom(src => src.ShortDescription))
+                .ForMember(dest => dest.Status, c => c.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Title, c => c.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Created, c => c.MapFrom(src => src.Created))
                 .ForAllOtherMembers(c=>c.Ignore());

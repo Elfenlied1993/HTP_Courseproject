@@ -27,5 +27,14 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public List<SelectListItem> Tags { get; set; }
         public ICollection<string> TagsTitles { get; set; }
         public List<SelectListItem> Categories { get; set; }
+        public NewsStatus Status { get; set; }
     }
+
+    public enum NewsStatus
+    {
+        Submitted,
+        Approved,
+        Rejected
+    }
+
 }

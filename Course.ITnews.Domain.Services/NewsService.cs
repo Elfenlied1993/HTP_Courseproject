@@ -33,8 +33,6 @@ namespace Course.ITnews.Domain.Services
             }
             return result;
         }
-
-
         public NewsViewModel Get(int id)
         {
             News news = unitOfWork.Get<News>(id);
@@ -66,6 +64,7 @@ namespace Course.ITnews.Domain.Services
             result.Category = category;
             var author = unitOfWork.Get<User>(result.AuthorId.GetValueOrDefault());
             result.Author = author;
+            unitOfWork.Add(result);
             result.NewsTags = new List<NewsTag>();
             if (viewModel.TagsIds != null)
             {
@@ -73,6 +72,7 @@ namespace Course.ITnews.Domain.Services
                 {
                     var newsTag = new NewsTag() {NewsId = result.Id, TagId = tagId};
                     result.NewsTags.Add(newsTag);
+
                     unitOfWork.Add<NewsTag>(newsTag);
                 }
             }
@@ -86,7 +86,6 @@ namespace Course.ITnews.Domain.Services
             //        unitOfWork.Add<Commentary>(commentary);
             //    }
             //}
-            unitOfWork.Add(result);
             unitOfWork.SaveChanges();
         }
 
@@ -134,14 +133,12 @@ namespace Course.ITnews.Domain.Services
             unitOfWork.Update(news);
             unitOfWork.SaveChanges();
         }
-
         public void Delete(int id)
         {
             News news = unitOfWork.Get<News>(id);
             unitOfWork.Remove<News>(id);
             unitOfWork.SaveChanges();
         }
-
         public List<SelectListItem> GetCategories()
         {
             var categories = new List<SelectListItem>();
@@ -151,7 +148,6 @@ namespace Course.ITnews.Domain.Services
             }
             return categories;
         }
-
         public NewsViewModel Tags(NewsViewModel viewModel)
         {
             var tempList = unitOfWork.GetAll<Tag>();
@@ -183,10 +179,22 @@ namespace Course.ITnews.Domain.Services
             {
                 tags.Add(new SelectListItem(){Value = tag.Title,Text = tag.Title});
             }
-
             return tags;
         }
 
-       
+        public NewsViewModel GetTagsTitles(NewsViewModel viewModel)
+        {
+            var tags = unitOfWork.GetAll<Tag>();
+            viewModel.TagsTitles=new List<string>();
+            for (int i = 0; i < tags.Count()-1; i++)
+            {
+                if (viewModel.TagsIds.ElementAt(i) == tags.ElementAt(i).Id)
+                {
+                    viewModel.TagsTitles.Add(tags.ElementAt(i).Title);
+                }
+            }
+
+            return viewModel;
+        }
     }
 }

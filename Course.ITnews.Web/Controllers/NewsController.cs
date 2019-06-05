@@ -85,6 +85,13 @@ namespace Course.ITnews.Web.Controllers
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
+
+        public IActionResult Details(int id)
+        {
+            NewsViewModel viewModel = newsService.Get(id);
+            viewModel = newsService.GetTagsTitles(viewModel);
+            return View(viewModel);
+        }
         public void PopPopulateLists(NewsViewModel viewModel)
         {
             viewModel.Categories = newsService.GetCategories();

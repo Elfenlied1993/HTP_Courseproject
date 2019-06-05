@@ -11,9 +11,14 @@
            @Html.DisplayFor(modelItem=>item.Author)
         </div>
         <div class="card-body">
-            <h5 class="card-title">@Html.DisplayFor(modelItem=>item.Title)</h5>
-            <p class="card-text">@Html.DisplayFor(modelItem=>item.ShortDescription)</p>
-            <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Show more</a>
+            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
+            <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Edit</a>
+            <a href="@Url.Action("Details","News",new {id = item.Id})" class="btn btn-primary">Details</a>
         </div>
     </div>
 }
+<p></p>
+<p><a href="@Url.Action("Create","News")" class="btn btn-primary">Create</a></p>
+
+

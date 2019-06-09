@@ -1,0 +1,23 @@
+﻿@model List<Course.ITnews.Data.Contracts.Entities.User>
+
+@{
+    ViewBag.Title = "Список пользователей";
+}
+
+<table class="table">
+    <tr><th>Email</th><th></th><th></th></tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-controller="Roles" asp-route-userid="@user.Id">Права доступа</a>
+                </form>
+            </td>
+        </tr>
+    }
+</table>

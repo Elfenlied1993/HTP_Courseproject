@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Course.ITnews.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="reader")]
     public class NewsController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -35,6 +35,7 @@ namespace Course.ITnews.Web.Controllers
             return View(newsService.GetAll().ToList());
         }
         //GET News/Edit/1
+        [Authorize(Roles="admin,writer")]
         public IActionResult Edit(int id)
         {
             NewsViewModel viewModel = newsService.Get(id);
@@ -64,6 +65,7 @@ namespace Course.ITnews.Web.Controllers
             return View(viewModel);
         }
         //GET News/Create
+        [Authorize(Roles="admin,writer")]
         public IActionResult Create()
         {
             var viewModel = new NewsViewModel();

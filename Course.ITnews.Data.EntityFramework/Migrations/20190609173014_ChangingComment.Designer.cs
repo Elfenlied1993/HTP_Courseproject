@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190605183151_Status")]
-    partial class Status
+    [Migration("20190609173014_ChangingComment")]
+    partial class ChangingComment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,9 +49,6 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                         .IsRequired();
 
                     b.Property<int?>("NewsId");
-
-                    b.Property<string>("Title")
-                        .IsRequired();
 
                     b.HasKey("Id");
 

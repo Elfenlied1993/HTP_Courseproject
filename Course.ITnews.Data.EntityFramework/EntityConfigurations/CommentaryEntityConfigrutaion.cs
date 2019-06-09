@@ -15,7 +15,6 @@ namespace Course.ITnews.Data.EntityFramework.EntityConfigurations
             builder.HasOne(x => x.News).WithMany(x => x.Commentaries).HasForeignKey(x => x.NewsId);
             builder.HasOne(x => x.Author).WithMany(x => x.Commentaries).HasForeignKey(x => x.AuthorId);
             builder.Property(x => x.Created).IsRequired();
-            builder.Property(x => x.Title).IsRequired();
             builder.Property(x => x.Description).IsRequired();
         }
     }

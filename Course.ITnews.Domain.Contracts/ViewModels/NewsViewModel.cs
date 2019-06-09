@@ -21,21 +21,12 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public string Category { get; set; }
         [Required]
         public int CategoryId { get; set; }
-        public ICollection<int> CommentariesIds { get; set; }
+        public ICollection<CommentaryViewModel> Commentaries { get; set; }
         public ICollection<int> TagsIds { get; set; }
-        public List<SelectListItem> Commentaries { get; set; }
         public List<SelectListItem> Tags { get; set; }
         [Required]
         public ICollection<string> TagsTitles { get; set; }
         public List<SelectListItem> Categories { get; set; }
-        public NewsStatus Status { get; set; }
+        public CommentaryViewModel NewComment { get; set; }
     }
-
-    public enum NewsStatus
-    {
-        Submitted,
-        Approved,
-        Rejected
-    }
-
 }

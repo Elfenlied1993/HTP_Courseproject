@@ -24,7 +24,6 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
                 .ForMember(dest => dest.Created, c => c.MapFrom(src => src.Created))
                 .ForMember(dest => dest.Description, c => c.MapFrom(src => src.Description))
                 .ForMember(dest => dest.NewsId, c => c.MapFrom(src => src.NewsId))
-                .ForMember(dest => dest.Title, c => c.MapFrom(src => src.Title))
                 .ForAllOtherMembers(c=>c.Ignore());
         }
 
@@ -32,7 +31,6 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
         {
             CreateMap<CommentaryViewModel,Commentary>()
                 .ForMember(dest=>dest.Id,c=>c.MapFrom(src=>src.Id))
-                .ForMember(dest=>dest.Title,c=>c.MapFrom(src=>src.Title))
                 .ForMember(dest=>dest.NewsId,c=>c.MapFrom(src=>src.NewsId))
                 .ForMember(dest=>dest.AuthorId,c=>c.MapFrom(src=>src.AuthorId))
                 .ForMember(dest=>dest.Created,c=>c.MapFrom(src=>src.Created))

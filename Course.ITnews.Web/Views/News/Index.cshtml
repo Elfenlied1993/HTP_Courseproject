@@ -15,6 +15,7 @@
             <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
             <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Edit</a>
             <a href="@Url.Action("Details","News",new {id = item.Id})" class="btn btn-primary">Details</a>
+            <a href="@Url.Action("Delete","News",new{id=item.Id})" class="btn btn-danger">Delete</a>
         </div>
     </div>
 }

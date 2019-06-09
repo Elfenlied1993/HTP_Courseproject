@@ -44,14 +44,9 @@ namespace Course.ITnews.Domain.Services
             var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
             var commentaries = unitOfWork.FindByCondition<Commentary>(x => x.NewsId == news.Id);
             result.TagsIds = new List<int>();
-            result.CommentariesIds = new List<int>();
             foreach (var tag in tags)
             {
                 result.TagsIds.Add(tag.TagId);
-            }
-            foreach (var commentary in commentaries)
-            {
-                result.CommentariesIds.Add(commentary.Id);
             }
             return result;
 
@@ -172,6 +167,7 @@ namespace Course.ITnews.Domain.Services
             }
             return viewModel;
         }
+        
         public List<SelectListItem> GetTags()
         {
             var tags = new List<SelectListItem>();
@@ -180,6 +176,26 @@ namespace Course.ITnews.Domain.Services
                 tags.Add(new SelectListItem(){Value = tag.Title,Text = tag.Title});
             }
             return tags;
+        }
+
+        public List<CommentaryViewModel> GetCommentaries(NewsViewModel viewModel)
+        {
+            var commentaries = new List<CommentaryViewModel>();
+            foreach (var commentary in unitOfWork.GetAll<Commentary>())
+            {
+               if (commentary.NewsId==viewModel.Id)
+               commentaries.Add(new CommentaryViewModel()
+               {
+                   AuthorName = commentary.Author.UserName,
+                   AuthorId = commentary.AuthorId.GetValueOrDefault(),
+                   Created = commentary.Created,
+                   Description = commentary.Description,
+                   Id = commentary.Id,
+                   NewsId = commentary.NewsId.GetValueOrDefault()
+               });
+            }
+
+            return commentaries;
         }
 
         public NewsViewModel GetTagsTitles(NewsViewModel viewModel)

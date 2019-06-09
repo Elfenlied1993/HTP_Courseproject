@@ -1,4 +1,5 @@
-﻿@using Markdig
+﻿@using Course.ITnews.Domain.Contracts.ViewModels
+@using Markdig
 @model Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel
 
 @{
@@ -11,58 +12,80 @@
 <div>
     <h4>News</h4>
     <hr />
+    <input asp-for="Id" type="hidden" id="newsId" />
     <dl class="row">
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ShortDescription)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ShortDescription)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FullDescription)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.Raw(Markdown.ToHtml(ViewData.Model.FullDescription,null))
+        <dd class="col-sm-10">
+            @Html.Raw(Markdown.ToHtml(ViewData.Model.FullDescription, null))
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Created)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Created)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Author)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Author)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TagsTitles)
         </dt>
         <dd class="col-sm-10">
             @{
                 foreach (var title in ViewData.Model.TagsTitles)
                 {
-            <span class="badge badge-primary">
-                @title
-            </span>
+                    <span class="badge badge-primary">
+                        @title
+                    </span>
                 }
             }
         </dd>
     </dl>
 </div>
+<div class="input-group mb-3">
+    <input type="hidden" id="authorId" value="@Html.ViewData.Model.NewComment.AuthorId" />
+    <input type="hidden" id="userInput" value="@Html.ViewData.Model.NewComment.AuthorName" />
+    <input type="text" id="messageInput" class="form-control" placeholder="Write your message" aria-label="Write your message" aria-describedby="button-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" id="sendButton" value="Send">Send</button>
+    </div>
+</div>
+<div id="comments">
+
+    @foreach (var item in Model.Commentaries)
+    {
+        <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
+        <div class="card">@Html.DisplayFor(modelItem=>item.Description)</div>
+    }
+
+</div>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/commentary.js"></script>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

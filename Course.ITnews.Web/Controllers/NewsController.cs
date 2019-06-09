@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Course.ITnews.Data.Contracts.Entities;
@@ -23,7 +24,6 @@ namespace Course.ITnews.Web.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly INewsService newsService;
-
         public NewsController(INewsService newsService, UserManager<User> userManager)
         {
             this.newsService = newsService;
@@ -91,13 +91,24 @@ namespace Course.ITnews.Web.Controllers
         public IActionResult Details(int id)
         {
             NewsViewModel viewModel = newsService.Get(id);
+            var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            viewModel.NewComment=new CommentaryViewModel();
+            viewModel.NewComment.AuthorName = currentUser.UserName;
+            viewModel.NewComment.AuthorId = currentUser.Id;
+            viewModel.Commentaries = newsService.GetCommentaries(viewModel);
             viewModel = newsService.GetTagsTitles(viewModel);
             return View(viewModel);
+        }
+        
+        public IActionResult Delete(int id)
+        {
+            newsService.Delete(id);
+            return RedirectToAction("Index");
         }
         public void PopPopulateLists(NewsViewModel viewModel)
         {
             viewModel.Categories = newsService.GetCategories();
             viewModel.Tags = newsService.GetTags();
         }
-    }
+   }
 }

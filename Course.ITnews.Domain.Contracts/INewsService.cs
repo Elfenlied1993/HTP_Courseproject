@@ -18,5 +18,6 @@ namespace Course.ITnews.Domain.Contracts
         List<SelectListItem> GetCategories();
         NewsViewModel GetTagsTitles(NewsViewModel viewModel);
         List<SelectListItem> GetTags();
+        List<CommentaryViewModel> GetCommentaries(NewsViewModel viewModel);
     }
 }

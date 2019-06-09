@@ -5,6 +5,15 @@
     {
       "library": "select2@4.0.7",
       "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@aspnet/signalr@1.0.3",
+      "destination": "wwwroot/lib/signalr/",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
     }
   ]
 }

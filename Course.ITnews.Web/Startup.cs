@@ -8,6 +8,7 @@ using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Data.EntityFramework;
 using Course.ITnews.Domain.Contracts.ViewModels;
 using Course.ITnews.Infrastructure;
+using Course.ITnews.Web.Hubs;
 using Course.ITnews.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +60,7 @@ namespace Course.ITnews.Web
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSignalR();
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<AutoMapperModule>();
             containerBuilder.RegisterModule<AppDomainModule>();
@@ -88,7 +90,10 @@ namespace Course.ITnews.Web
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<CommentariesHub>("/commentaryHub");
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

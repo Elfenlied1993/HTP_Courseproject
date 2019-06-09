@@ -48,9 +48,6 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.Property<int?>("NewsId");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");

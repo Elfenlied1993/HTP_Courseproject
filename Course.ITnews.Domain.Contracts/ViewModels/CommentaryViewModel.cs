@@ -8,9 +8,6 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
     public class CommentaryViewModel
     {
         public int Id { get; set; }
-        [Required]
-        public string Title { get; set; }
-        [Required]
         public string AuthorName { get; set; }
         public int AuthorId { get; set; }
         public int NewsId { get; set; }

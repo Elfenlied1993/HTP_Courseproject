@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class Status : Migration
+    public partial class ChangingComment : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -218,7 +218,6 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: false),
                     AuthorId = table.Column<int>(nullable: true),
                     NewsId = table.Column<int>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),

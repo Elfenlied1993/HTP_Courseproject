@@ -37,8 +37,9 @@
         </div>
         <div class="form-group">
             <p>
-
+                <label asp-for="TagsTitles" class="control-label">Tags:</label>
                 <select asp-for="TagsTitles" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
+                <span asp-validation-for="TagsTitles" class="text-danger"></span>
             </p>
         </div>
         <input asp-for="Tags" type="hidden" />
@@ -72,6 +73,6 @@
             var easyMDE = new EasyMDE({
                 autoDownloadFontAwesome: true,
                 element: document.getElementById('full-description'),
-                initialValue: '*Write your text here.*',
+                initialValue: '@ViewData.Model.FullDescription',
             });
         </script>

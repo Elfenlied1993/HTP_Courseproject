@@ -34,9 +34,9 @@
         </div>
         <div class="form-group">
             <p>
-
+                <label asp-for="TagsTitles" class="control-label">Tags:</label>
                 <select asp-for="TagsTitles" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
-            </p>
+                <span asp-validation-for="TagsTitles" class="text-danger"></span> </p>
         </div>
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
         <textarea id="full-description" style="display: none" asp-for="FullDescription"></textarea>

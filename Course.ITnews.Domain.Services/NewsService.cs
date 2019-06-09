@@ -186,11 +186,12 @@ namespace Course.ITnews.Domain.Services
         {
             var tags = unitOfWork.GetAll<Tag>();
             viewModel.TagsTitles=new List<string>();
-            for (int i = 0; i < tags.Count()-1; i++)
+            foreach (var tagId in viewModel.TagsIds)
             {
-                if (viewModel.TagsIds.ElementAt(i) == tags.ElementAt(i).Id)
+                var tag = tags.FirstOrDefault(x => x.Id == tagId);
+                if (tag != null)
                 {
-                    viewModel.TagsTitles.Add(tags.ElementAt(i).Title);
+                    viewModel.TagsTitles.Add(tag.Title);
                 }
             }
 

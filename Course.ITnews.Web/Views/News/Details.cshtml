@@ -51,8 +51,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TagsTitles)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TagsTitles)
+        <dd class="col-sm-10">
+            @{
+                foreach (var title in ViewData.Model.TagsTitles)
+                {
+            <span class="badge badge-primary">
+                @title
+            </span>
+                }
+            }
         </dd>
     </dl>
 </div>

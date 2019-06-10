@@ -66,6 +66,7 @@
         </dd>
     </dl>
 </div>
+   
 <div class="input-group mb-3">
     <input type="hidden" id="authorId" value="@Html.ViewData.Model.NewComment.AuthorId" />
     <input type="hidden" id="userInput" value="@Html.ViewData.Model.NewComment.AuthorName" />
@@ -75,17 +76,32 @@
     </div>
 </div>
 <div id="comments">
-
     @foreach (var item in Model.Commentaries)
     {
-        <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
-        <div class="card">@Html.DisplayFor(modelItem=>item.Description)</div>
-    }
+        <a>
+            <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
+            <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
 
+            <form asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                    Delete
+                </button>
+            </form>
+        </a>
+    }
 </div>
+
+<script>
+    function deleteItem(form) {
+        $(form).parents('a').remove();
+    }
+</script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/jquery.unobtrusive-ajax.js"></script>
 <script src="~/js/commentary.js"></script>
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

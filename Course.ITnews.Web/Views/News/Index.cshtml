@@ -16,10 +16,10 @@
             <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Edit</a>
             <a href="@Url.Action("Details","News",new {id = item.Id})" class="btn btn-primary">Details</a>
             <a href="@Url.Action("Delete","News",new{id=item.Id})" class="btn btn-danger">Delete</a>
-        </div>
+            </div>
     </div>
 }
 <p></p>
 <p><a href="@Url.Action("Create","News")" class="btn btn-primary">Create</a></p>
-
-
+<script src="~/js/rating.js"></script>
+<link rel="stylesheet" type="text/css" href="~/js/rating.css">

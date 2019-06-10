@@ -5,23 +5,24 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/commentaryHub").bu
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveCommentary", function (user, message,authorId,newsId) {
+connection.on("ReceiveCommentary", function (user, message, authorId, newsId) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg =msg;
+    var encodedMsg = msg;
     var authorId = document.getElementById("authorId").value;
     var newsId = document.getElementById("newsId").value;
     document.getElementById("messageInput").value = "";
+    var cardDiv = $('<a>').appendTo($('#comments'));
     var cardHeader = $('<div>',
         {
             class: 'card-header',
             text: user + ' says:'
-        }).appendTo($('#comments'));
+        }).appendTo(cardDiv);
     var card = $('<div>',
         {
             class: 'card',
             text: encodedMsg
-        }).appendTo($('#comments'));
-});
+        }).appendTo(cardDiv);
+})
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;

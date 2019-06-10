@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
@@ -24,12 +25,19 @@ namespace Course.ITnews.Web.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly INewsService newsService;
-        public NewsController(INewsService newsService, UserManager<User> userManager)
+        private readonly ICommentaryService commentaryService;
+        public NewsController(INewsService newsService, UserManager<User> userManager, ICommentaryService commentaryService)
         {
             this.newsService = newsService;
             this.userManager = userManager;
+            this.commentaryService = commentaryService;
         }
-
+        [HttpPost]
+        public IActionResult DeleteComment(int id)
+        {
+                commentaryService.Delete(id);
+            return NoContent();
+        }
         public IActionResult Index()
         {
             return View(newsService.GetAll().ToList());

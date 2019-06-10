@@ -107,7 +107,11 @@ namespace Course.ITnews.Web.Controllers
             viewModel = newsService.GetTagsTitles(viewModel);
             return View(viewModel);
         }
-        
+        [HttpPost]
+        public IActionResult Index(NewsViewModel viewModel)
+        {
+            return RedirectToAction("Details");
+        }
         public IActionResult Delete(int id)
         {
             newsService.Delete(id);

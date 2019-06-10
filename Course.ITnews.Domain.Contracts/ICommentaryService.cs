@@ -10,7 +10,6 @@ namespace Course.ITnews.Domain.Contracts
         IEnumerable<CommentaryViewModel> GetAll();
         CommentaryViewModel Get(int id);
         void Add(CommentaryViewModel viewModel);
-        void Edit(CommentaryViewModel viewModel);
         void Delete(int id);
     }
 }

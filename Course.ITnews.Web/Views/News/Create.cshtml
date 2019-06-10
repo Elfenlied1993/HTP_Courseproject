@@ -39,7 +39,7 @@
                 <span asp-validation-for="TagsTitles" class="text-danger"></span> </p>
         </div>
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
-        <textarea id="full-description" style="display: none" asp-for="FullDescription"></textarea>
+        <textarea id="full-description" style="display: none" placeholder="*Write your text here*" asp-for="FullDescription"></textarea>
 
         <div class="form-group">
             <label asp-for="ShortDescription" class="control-label">Enter your short description here:</label>
@@ -67,7 +67,6 @@
 <script type="text/javascript">
     var easyMDE = new EasyMDE({
         autoDownloadFontAwesome: true,
-        element: document.getElementById('full-description'),
-        initialValue: '*Write your text here.*',
+        element: document.getElementById('full-description')
     });
 </script>

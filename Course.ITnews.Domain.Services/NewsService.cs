@@ -15,7 +15,7 @@ namespace Course.ITnews.Domain.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        
+
         public NewsService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
@@ -40,9 +40,20 @@ namespace Course.ITnews.Domain.Services
             news.Category = category;
             User user = unitOfWork.Get<User>(news.AuthorId.GetValueOrDefault());
             news.Author = user;
-            var result = mapper.Map<NewsViewModel>(news); 
+            var result = mapper.Map<NewsViewModel>(news);
             var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
-            var commentaries = unitOfWork.FindByCondition<Commentary>(x => x.NewsId == news.Id);
+            var ratings = unitOfWork.FindByCondition<Rating>(x => x.NewsId == news.Id);
+            result.Ratings = new List<RatingViewModel>();
+            foreach (var rating in ratings)
+            {
+                result.Ratings.Add(new RatingViewModel()
+                {
+                    Id = rating.Id,
+                    NewsId = rating.NewsId.GetValueOrDefault(),
+                    UserId = rating.AuthorId.GetValueOrDefault(),
+                    RatingNumber = rating.RatingNumber
+                });
+            }
             result.TagsIds = new List<int>();
             foreach (var tag in tags)
             {
@@ -65,22 +76,29 @@ namespace Course.ITnews.Domain.Services
             {
                 foreach (int tagId in viewModel.TagsIds)
                 {
-                    var newsTag = new NewsTag() {NewsId = result.Id, TagId = tagId};
+                    var newsTag = new NewsTag() { NewsId = result.Id, TagId = tagId };
                     result.NewsTags.Add(newsTag);
 
                     unitOfWork.Add<NewsTag>(newsTag);
                 }
             }
-            //result.Commentaries = new List<Commentary>();
-            //if (viewModel.CommentariesIds != null)
-            //{
-            //    foreach (string commentaryId in viewModel.CommentariesIds)
-            //    {
-            //        var commentary = new Commentary(){NewsId = result.Id,Id = commentaryId};
-            //        result.Commentaries.Add(commentary);
-            //        unitOfWork.Add<Commentary>(commentary);
-            //    }
-            //}
+
+            if (viewModel.Ratings != null)
+            {
+                foreach (var rating in viewModel.Ratings)
+                {
+                    var newRating = new Rating() { AuthorId = rating.UserId, RatingNumber = rating.RatingNumber, NewsId = rating.NewsId };
+                    var existingRating = unitOfWork.FindByCondition<Rating>(x => x.AuthorId == rating.UserId);
+                    if (existingRating == null)
+                    {
+                        unitOfWork.Add<Rating>(newRating);
+                    }
+                    else
+                    {
+                        unitOfWork.Update<Rating>(newRating);
+                    }
+                }
+            }
             unitOfWork.SaveChanges();
         }
 
@@ -93,7 +111,7 @@ namespace Course.ITnews.Domain.Services
             news.Category = unitOfWork.Get<Category>(viewModel.CategoryId);
             news.Author = unitOfWork.Get<User>(viewModel.AuthorId);
             var tags = unitOfWork.GetAll<Tag>();
-            List<NewsTag> newsTags = (List<NewsTag>) unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
+            List<NewsTag> newsTags = (List<NewsTag>)unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
             if (viewModel.TagsIds == null)
             {
                 foreach (var newsTag in newsTags)
@@ -113,14 +131,14 @@ namespace Course.ITnews.Domain.Services
                         }
                         else
                         {
-                            unitOfWork.Add<NewsTag>(new NewsTag(){NewsId = news.Id,TagId = tag.Id});
+                            unitOfWork.Add<NewsTag>(new NewsTag() { NewsId = news.Id, TagId = tag.Id });
                         }
                     }
                     else
                     {
                         if (newsTags.Exists(x => x.TagId == tag.Id))
                         {
-                            unitOfWork.Remove<NewsTag>(newsTags.Find(x=>x.TagId==tag.Id).Id);
+                            unitOfWork.Remove<NewsTag>(newsTags.Find(x => x.TagId == tag.Id).Id);
                         }
                     }
                 }
@@ -139,7 +157,7 @@ namespace Course.ITnews.Domain.Services
             var categories = new List<SelectListItem>();
             foreach (var category in unitOfWork.GetAll<Category>())
             {
-                categories.Add(new SelectListItem(){Value = category.Id.ToString(),Text = category.Title});
+                categories.Add(new SelectListItem() { Value = category.Id.ToString(), Text = category.Title });
             }
             return categories;
         }
@@ -150,30 +168,30 @@ namespace Course.ITnews.Domain.Services
             foreach (var title in viewModel.TagsTitles)
             {
                 var tag = tempList.FirstOrDefault(x => x.Title == title);
-                    if (tag!=null)
+                if (tag != null)
+                {
+                    viewModel.TagsIds.Add(tag.Id);
+                }
+                else
+                {
+                    Tag tempTag = new Tag() { Title = title };
+                    unitOfWork.Add<Tag>(tempTag);
+                    var newTag = unitOfWork.FindByCondition<Tag>(x => x.Title == tempTag.Title);
+                    foreach (var newId in newTag)
                     {
-                        viewModel.TagsIds.Add(tag.Id);
+                        viewModel.TagsIds.Add(newId.Id);
                     }
-                    else
-                    {
-                        Tag tempTag = new Tag(){Title = title};
-                        unitOfWork.Add<Tag>(tempTag);
-                        var newTag = unitOfWork.FindByCondition<Tag>(x => x.Title == tempTag.Title);
-                        foreach (var newId in newTag)
-                        {
-                                viewModel.TagsIds.Add(newId.Id);
-                        }
                 }
             }
             return viewModel;
         }
-        
+
         public List<SelectListItem> GetTags()
         {
             var tags = new List<SelectListItem>();
             foreach (var tag in unitOfWork.GetAll<Tag>())
             {
-                tags.Add(new SelectListItem(){Value = tag.Title,Text = tag.Title});
+                tags.Add(new SelectListItem() { Value = tag.Title, Text = tag.Title });
             }
             return tags;
         }
@@ -183,16 +201,16 @@ namespace Course.ITnews.Domain.Services
             var commentaries = new List<CommentaryViewModel>();
             foreach (var commentary in unitOfWork.GetAll<Commentary>())
             {
-               if (commentary.NewsId==viewModel.Id)
-               commentaries.Add(new CommentaryViewModel()
-               {
-                   AuthorName = commentary.Author.UserName,
-                   AuthorId = commentary.AuthorId.GetValueOrDefault(),
-                   Created = commentary.Created,
-                   Description = commentary.Description,
-                   Id = commentary.Id,
-                   NewsId = commentary.NewsId.GetValueOrDefault()
-               });
+                if (commentary.NewsId == viewModel.Id)
+                    commentaries.Add(new CommentaryViewModel()
+                    {
+                        AuthorName = commentary.Author.UserName,
+                        AuthorId = commentary.AuthorId.GetValueOrDefault(),
+                        Created = commentary.Created,
+                        Description = commentary.Description,
+                        Id = commentary.Id,
+                        NewsId = commentary.NewsId.GetValueOrDefault()
+                    });
             }
 
             return commentaries;
@@ -201,7 +219,7 @@ namespace Course.ITnews.Domain.Services
         public NewsViewModel GetTagsTitles(NewsViewModel viewModel)
         {
             var tags = unitOfWork.GetAll<Tag>();
-            viewModel.TagsTitles=new List<string>();
+            viewModel.TagsTitles = new List<string>();
             foreach (var tagId in viewModel.TagsIds)
             {
                 var tag = tags.FirstOrDefault(x => x.Id == tagId);

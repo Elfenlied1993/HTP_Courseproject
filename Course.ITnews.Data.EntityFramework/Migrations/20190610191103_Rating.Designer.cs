@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190609173014_ChangingComment")]
-    partial class ChangingComment
+    [Migration("20190610191103_Rating")]
+    partial class Rating
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,8 +77,6 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.Property<string>("ShortDescription")
                         .IsRequired();
 
-                    b.Property<int>("Status");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -102,6 +100,27 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("NewsTags");
+                });
+
+            modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuthorId");
+
+                    b.Property<int>("NewsId");
+
+                    b.Property<int>("RatingNumber");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("NewsId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Tag", b =>
@@ -309,6 +328,19 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.Tag", "Tag")
                         .WithMany("NewsTags")
                         .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Rating", b =>
+                {
+                    b.HasOne("Course.ITnews.Data.Contracts.Entities.User", "Author")
+                        .WithMany("Ratings")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Course.ITnews.Data.Contracts.Entities.News", "News")
+                        .WithMany("Ratings")
+                        .HasForeignKey("NewsId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

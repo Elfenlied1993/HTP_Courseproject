@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class ChangingComment : Migration
+    public partial class Rating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -192,8 +192,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     FullDescription = table.Column<string>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     AuthorId = table.Column<int>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -264,6 +263,33 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    NewsId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<int>(nullable: false),
+                    RatingNumber = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ratings_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_News_NewsId",
+                        column: x => x.NewsId,
+                        principalTable: "News",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -327,6 +353,16 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "IX_NewsTags_TagId",
                 table: "NewsTags",
                 column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_AuthorId",
+                table: "Ratings",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_NewsId",
+                table: "Ratings",
+                column: "NewsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -353,13 +389,16 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "NewsTags");
 
             migrationBuilder.DropTable(
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "News");
+                name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "News");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

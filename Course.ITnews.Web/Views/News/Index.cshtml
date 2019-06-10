@@ -8,18 +8,32 @@
 {
     <div class="card">
         <div class="card-header">
-           @Html.DisplayFor(modelItem=>item.Author)
+            @Html.DisplayFor(modelItem => item.Author)
         </div>
         <div class="card-body">
+
             <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
             <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
-            <a href="@Url.Action("Edit","News",new {id = item.Id})" class="btn btn-primary">Edit</a>
-            <a href="@Url.Action("Details","News",new {id = item.Id})" class="btn btn-primary">Details</a>
-            <a href="@Url.Action("Delete","News",new{id=item.Id})" class="btn btn-danger">Delete</a>
-            </div>
+            <input id="input-2" asp-for="@item.RatingNumber" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" name="input-2" data-min="0" data-max="5" data-step="0.1" />
+            <a href="@Url.Action("Edit", "News", new {id = item.Id})" class="btn btn-primary">Edit</a>
+            <a href="@Url.Action("Details", "News", new {id = item.Id})" class="btn btn-primary">Details</a>
+            <a href="@Url.Action("Delete", "News", new {id = item.Id})" class="btn btn-danger">Delete</a>
+        </div>
     </div>
 }
+
 <p></p>
 <p><a href="@Url.Action("Create","News")" class="btn btn-primary">Create</a></p>
-<script src="~/js/rating.js"></script>
-<link rel="stylesheet" type="text/css" href="~/js/rating.css">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js" type="text/javascript"></script>
+<script src="~/js/jquery.unobtrusive-ajax.js"></script>
+<script>
+    $("#input-2").rating();
+    $('#input-2').on('rating:change',postRating);
+    function postRating(event, value, caption) {
+        alert('Posted using Unobstrusive Ajax')
+    }
+</script>
+

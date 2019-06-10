@@ -50,15 +50,6 @@ namespace Course.ITnews.Domain.Services
             unitOfWork.SaveChanges();
         }
 
-        public void Edit(CommentaryViewModel viewModel)
-        {
-            Commentary commentary = unitOfWork.Get<Commentary>(viewModel.Id);
-            commentary.Author = unitOfWork.Get<User>(viewModel.AuthorId);
-            commentary.News = unitOfWork.Get<News>(viewModel.NewsId);
-            mapper.Map(viewModel, commentary);
-            unitOfWork.Update(commentary);
-            unitOfWork.SaveChanges();
-        }
 
         public void Delete(int id)
         {

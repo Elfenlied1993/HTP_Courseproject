@@ -93,6 +93,7 @@ namespace Course.ITnews.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<CommentariesHub>("/commentaryHub");
+                routes.MapHub<RatingHub>("/ratingHub");
             });
             app.UseMvc(routes =>
             {

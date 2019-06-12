@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Course.ITnews.Domain.Contracts.ViewModels
 {
-    public class RatingViewModel
+    public class LikeViewModel
     {
         public int Id { get; set; }
-        public int NewsId { get; set; }
-        public int UserId { get; set; }
-        public double RatingNumber { get; set; }
+        public int AuthorId { get; set; }
+        public int CommentId { get; set; }
     }
 }

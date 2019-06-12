@@ -11,6 +11,7 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual List<News> News { get; set; }
         public virtual ICollection<Commentary> Commentaries { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
 
     }
 }

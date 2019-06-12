@@ -30,6 +30,26 @@ namespace Course.ITnews.Domain.Services
             {
                 User user = unitOfWork.Get<User>(post.AuthorId);
                 post.Author = user.UserName;
+                var ratings = unitOfWork.FindByCondition<Rating>(x => x.NewsId == post.Id);
+                post.Ratings = new List<RatingViewModel>();
+                foreach (var rating in ratings)
+                {
+                    post.Ratings.Add(new RatingViewModel()
+                    {
+                        Id = rating.Id,
+                        NewsId = rating.NewsId.GetValueOrDefault(),
+                        UserId = rating.AuthorId.GetValueOrDefault(),
+                        RatingNumber = rating.RatingNumber
+                    });
+                }
+                var allRating = 0.0;
+                foreach (var rating in post.Ratings)
+                {
+                    allRating += rating.RatingNumber;
+                }
+                post.AverageRating = allRating / post.Ratings.Count;
+                post.TagsIds = new List<int>();
+
             }
             return result;
         }
@@ -43,6 +63,9 @@ namespace Course.ITnews.Domain.Services
             var result = mapper.Map<NewsViewModel>(news);
             var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
             var ratings = unitOfWork.FindByCondition<Rating>(x => x.NewsId == news.Id);
+
+            result.Commentaries=new List<CommentaryViewModel>();
+            result.Commentaries = GetCommentaries(result);
             result.Ratings = new List<RatingViewModel>();
             foreach (var rating in ratings)
             {
@@ -54,6 +77,13 @@ namespace Course.ITnews.Domain.Services
                     RatingNumber = rating.RatingNumber
                 });
             }
+            var allRating = 0.0;
+            foreach (var rating in result.Ratings)
+            {
+                allRating += rating.RatingNumber;
+            }
+
+            result.AverageRating = allRating / result.Ratings.Count;
             result.TagsIds = new List<int>();
             foreach (var tag in tags)
             {
@@ -80,23 +110,6 @@ namespace Course.ITnews.Domain.Services
                     result.NewsTags.Add(newsTag);
 
                     unitOfWork.Add<NewsTag>(newsTag);
-                }
-            }
-
-            if (viewModel.Ratings != null)
-            {
-                foreach (var rating in viewModel.Ratings)
-                {
-                    var newRating = new Rating() { AuthorId = rating.UserId, RatingNumber = rating.RatingNumber, NewsId = rating.NewsId };
-                    var existingRating = unitOfWork.FindByCondition<Rating>(x => x.AuthorId == rating.UserId);
-                    if (existingRating == null)
-                    {
-                        unitOfWork.Add<Rating>(newRating);
-                    }
-                    else
-                    {
-                        unitOfWork.Update<Rating>(newRating);
-                    }
                 }
             }
             unitOfWork.SaveChanges();

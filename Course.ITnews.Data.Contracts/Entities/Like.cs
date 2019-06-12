@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Text;
 
 namespace Course.ITnews.Data.Contracts.Entities
 {
-    public class Rating
+    public class Like
     {
         public virtual int Id { get; set; }
-        public virtual News News { get; set; }
-        public virtual int? NewsId { get; set; }
         public virtual User Author { get; set; }
         public virtual int? AuthorId { get; set; }
-        public virtual double RatingNumber { get; set; }
+        public virtual Commentary Comment { get; set; }
+        public virtual int? CommentId { get; set; }
     }
 }

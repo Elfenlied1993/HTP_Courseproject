@@ -13,9 +13,11 @@
     <h4>News</h4>
     <hr />
     <input asp-for="Id" type="hidden" id="newsId" />
+    <input type="hidden" asp-for="@ViewData["Author"]" id="authorId" />
+
     <dl class="row">
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-2" ">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class="col-sm-10">
@@ -65,8 +67,12 @@
             }
         </dd>
     </dl>
+    <div class="d-flex">
+        <input id="input-2" name="input-2" value="@Model.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1" />
+        <span class="mt-3 pl-2">@Model.Ratings.Count() users rated</span>
+    </div>
 </div>
-   
+
 <div class="input-group mb-3">
     <input type="hidden" id="authorId" value="@Html.ViewData.Model.NewComment.AuthorId" />
     <input type="hidden" id="userInput" value="@Html.ViewData.Model.NewComment.AuthorName" />
@@ -96,11 +102,41 @@
         $(form).parents('a').remove();
     }
 </script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js" type="text/javascript"></script>
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/jquery.unobtrusive-ajax.js"></script>
 <script src="~/js/commentary.js"></script>
+<script>
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/ratingHub").build();
+    connection.start().then(function () { }).catch(function (err) {
+        return console.error(err.toString());
+    });
+    $("#input-2").rating();
+    $('#input-2').on('rating:change', postRating);
+    function postRating(event, value, caption) {
+        sendRating(event);
+    }
+    var connection = new signalR.HubConnectionBuilder().withUrl("/ratingHub").build();
+    connection.start().then(function () { }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    function sendRating(event) {
+        var ratingNumber = document.getElementById("input-2").value;
+        var authorId = document.getElementById("authorId").value;
+        var newsId = document.getElementById("newsId").value;
+        connection.invoke("SendRating", ratingNumber, authorId, newsId).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    };
+</script>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

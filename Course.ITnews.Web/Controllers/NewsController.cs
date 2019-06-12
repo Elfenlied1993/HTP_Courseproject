@@ -26,11 +26,13 @@ namespace Course.ITnews.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly INewsService newsService;
         private readonly ICommentaryService commentaryService;
-        public NewsController(INewsService newsService, UserManager<User> userManager, ICommentaryService commentaryService)
+        private readonly IRatingService ratingService;
+        public NewsController(INewsService newsService, UserManager<User> userManager, ICommentaryService commentaryService, IRatingService ratingService)
         {
             this.newsService = newsService;
             this.userManager = userManager;
             this.commentaryService = commentaryService;
+            this.ratingService = ratingService;
         }
         [HttpPost]
         public IActionResult DeleteComment(int id)
@@ -40,6 +42,7 @@ namespace Course.ITnews.Web.Controllers
         }
         public IActionResult Index()
         {
+
             return View(newsService.GetAll().ToList());
         }
         //GET News/Edit/1
@@ -100,6 +103,7 @@ namespace Course.ITnews.Web.Controllers
         {
             NewsViewModel viewModel = newsService.Get(id);
             var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            ViewData["Author"] = currentUser.Id;
             viewModel.NewComment=new CommentaryViewModel();
             viewModel.NewComment.AuthorName = currentUser.UserName;
             viewModel.NewComment.AuthorId = currentUser.Id;
@@ -114,6 +118,16 @@ namespace Course.ITnews.Web.Controllers
         }
         public IActionResult Delete(int id)
         {
+            var viewModel = newsService.Get(id);
+            foreach (var rating in viewModel.Ratings)
+            {
+                ratingService.Delete(rating.Id);
+            }
+
+            foreach (var comment in viewModel.Commentaries)
+            {
+                commentaryService.Delete(comment.Id);
+            }
             newsService.Delete(id);
             return RedirectToAction("Index");
         }

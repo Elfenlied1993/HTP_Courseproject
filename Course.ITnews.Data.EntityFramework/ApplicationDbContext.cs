@@ -26,7 +26,7 @@ namespace Course.ITnews.Data.EntityFramework
         public DbSet<NewsTag> NewsTags { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-
+        public DbSet<Like> Likes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
@@ -35,6 +35,7 @@ namespace Course.ITnews.Data.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new LikeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RatingEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CommentaryEntityConfigrutaion());

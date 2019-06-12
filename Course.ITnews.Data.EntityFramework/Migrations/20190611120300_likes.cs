@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class Rating : Migration
+    public partial class likes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -269,9 +269,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    NewsId = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<int>(nullable: false),
-                    RatingNumber = table.Column<int>(nullable: false)
+                    NewsId = table.Column<int>(nullable: true),
+                    AuthorId = table.Column<int>(nullable: true),
+                    RatingNumber = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,13 +281,39 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ratings_News_NewsId",
                         column: x => x.NewsId,
                         principalTable: "News",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorId = table.Column<int>(nullable: true),
+                    CommentId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Likes_Commentaries_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Commentaries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -340,6 +366,16 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 column: "NewsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Likes_AuthorId",
+                table: "Likes",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_CommentId",
+                table: "Likes",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_News_AuthorId",
                 table: "News",
                 column: "AuthorId");
@@ -383,7 +419,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Commentaries");
+                name: "Likes");
 
             migrationBuilder.DropTable(
                 name: "NewsTags");
@@ -393,6 +429,9 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Commentaries");
 
             migrationBuilder.DropTable(
                 name: "Tags");

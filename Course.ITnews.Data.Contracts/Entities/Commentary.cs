@@ -13,5 +13,6 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual int? NewsId { get; set; }
         public virtual DateTime Created { get; set; }
         public virtual string Description { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }

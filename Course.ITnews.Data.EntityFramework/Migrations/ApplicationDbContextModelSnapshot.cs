@@ -57,6 +57,25 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.ToTable("Commentaries");
                 });
 
+            modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AuthorId");
+
+                    b.Property<int?>("CommentId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
                 {
                     b.Property<int>("Id")
@@ -106,11 +125,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AuthorId");
+                    b.Property<int?>("AuthorId");
 
-                    b.Property<int>("NewsId");
+                    b.Property<int?>("NewsId");
 
-                    b.Property<int>("RatingNumber");
+                    b.Property<double>("RatingNumber");
 
                     b.HasKey("Id");
 
@@ -305,6 +324,17 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                         .HasForeignKey("NewsId");
                 });
 
+            modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.Like", b =>
+                {
+                    b.HasOne("Course.ITnews.Data.Contracts.Entities.User", "Author")
+                        .WithMany("Likes")
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("Course.ITnews.Data.Contracts.Entities.Commentary", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("CommentId");
+                });
+
             modelBuilder.Entity("Course.ITnews.Data.Contracts.Entities.News", b =>
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.User", "Author")
@@ -333,13 +363,11 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                 {
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.User", "Author")
                         .WithMany("Ratings")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("Course.ITnews.Data.Contracts.Entities.News", "News")
                         .WithMany("Ratings")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("NewsId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

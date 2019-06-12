@@ -17,15 +17,24 @@ namespace Course.ITnews.Web.Hubs
             this.commentaryService = commentaryService;
         }
 
-        public void SendCommentary(string user, string message, int authorId, int newsId)
+        public void SendCommentary(string user, string message, int authorId, int newsId, int commentId)
         {
             CommentaryViewModel viewModel = new CommentaryViewModel();
+            var comments = commentaryService.GetAll();
+            var existingComment = comments.FirstOrDefault(x => x.Id == commentId);
+            if (existingComment != null)
+            {
+                commentId++;
+            }
+
+            viewModel.Id = commentId;
             viewModel.AuthorId = authorId;
             viewModel.Description = message;
             viewModel.Created = DateTime.Now;
             viewModel.NewsId = newsId;
             commentaryService.Add(viewModel);
-            Clients.All.SendAsync("ReceiveCommentary", user, message, authorId, newsId);
+            Clients.All.SendAsync("ReceiveCommentary", viewModel.AuthorName, viewModel.Description, viewModel.AuthorId,
+                viewModel.NewsId, viewModel.Id);
         }
 
     }

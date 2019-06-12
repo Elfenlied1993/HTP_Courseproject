@@ -6,30 +6,32 @@
 <h2>News</h2>
 @foreach (var item in Model)
 {
-    <div class="card">
-        <div class="card-header">
-            @Html.DisplayFor(modelItem => item.Author)
-        </div>
-        <div class="card-body">
-            <input type="hidden" asp-for="@item.Id" id="newsId" />
-            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-            <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
+   
+        <div class="card">
+            <div class="card-header">
+                @Html.DisplayFor(modelItem => item.Author)
+            </div>
+            <div class="card-body">
+                <input type="hidden" asp-for="@item.Id" id="newsId"/>
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
 
-            <label class="mt-5" for="input-2">Average rating:</label>
-            <div class="d-flex">
-                <input id="input-2" name="input-2" value="@item.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1"/>
-                <span class="mt-3 pl-2">@item.Ratings.Count() users rated</span>
-                <div class="blockquote text-right pr-3 ">
+                <label class="mt-5" for="input-2">Average rating:</label>
+                <div class="d-flex">
+                    <input id="input-2" name="input-2" value="@item.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1"/>
+                    <span class="mt-3 pl-2">@item.Ratings.Count() users rated</span>
+                    <div class="blockquote text-right pr-3 ">
 
-                    <a href="@Url.Action("Edit", "News", new {id = item.Id})" class="btn btn-primary">Edit</a>
-                    <a href="@Url.Action("Details", "News", new {id = item.Id})" class="btn btn-primary">Details</a>
-                    <a href="@Url.Action("Delete", "News", new {id = item.Id})" class="btn btn-danger">Delete</a>
+                        <a href="@Url.Action("Edit", "News", new {id = item.Id})" class="btn btn-primary">Edit</a>
+                        <a href="@Url.Action("Details", "News", new {id = item.Id})" class="btn btn-primary">Details</a>
+                        <a href="@Url.Action("Delete", "News", new {id = item.Id})" class="btn btn-danger">Delete</a>
+
+                    </div>
 
                 </div>
-
-                </div>
+            </div>
         </div>
-    </div>
+    
 }
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />

@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Text;
 using Autofac;
 using Course.ITnews.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Course.ITnews.Data.EntityFramework
 {

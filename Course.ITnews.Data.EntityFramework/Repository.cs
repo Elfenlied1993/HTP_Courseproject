@@ -51,7 +51,11 @@ namespace Course.ITnews.Data.EntityFramework
 
         public void SaveChanges()
         {
+            dbContext.Database.OpenConnection();
+            dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Commentaries ON");
             dbContext.SaveChanges();
+            dbContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Commentaries OFF");
+            dbContext.Database.CloseConnection();
         }
 
         public void Update(T entity)

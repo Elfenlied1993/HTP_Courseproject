@@ -37,7 +37,7 @@ namespace Course.ITnews.Web.Controllers
         [HttpPost]
         public IActionResult DeleteComment(int id)
         {
-                commentaryService.Delete(id);
+            commentaryService.Delete(id);
             return NoContent();
         }
         public IActionResult Index()
@@ -103,11 +103,19 @@ namespace Course.ITnews.Web.Controllers
         {
             NewsViewModel viewModel = newsService.Get(id);
             var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            ViewData["Author"] = currentUser.Id;
             viewModel.NewComment=new CommentaryViewModel();
             viewModel.NewComment.AuthorName = currentUser.UserName;
             viewModel.NewComment.AuthorId = currentUser.Id;
             viewModel.Commentaries = newsService.GetCommentaries(viewModel);
+            if (viewModel.Commentaries.Count == 0)
+            {
+                viewModel.Commentaries.Add(new CommentaryViewModel()
+                {
+                    Id = 1
+                });
+            }
+
+            ViewData["LastId"] = viewModel.Commentaries.LastOrDefault().Id;
             viewModel = newsService.GetTagsTitles(viewModel);
             return View(viewModel);
         }

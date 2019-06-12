@@ -66,6 +66,7 @@
             }
         </dd>
     </dl>
+
     <div class="d-flex">
         <input id="input-2" name="input-2" value="@Model.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1" />
         <span class="mt-3 pl-2">@Model.Ratings.Count() users rated</span>
@@ -82,39 +83,15 @@
 </div>
 <input value="@ViewData["LastId"]" type="hidden" id="commentId">
 
-<div id="comments">
-    @foreach (var item in Model.Commentaries)
-    {
-
-        if (item.Description != null)
-        {
-            <a>
-                <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
-                <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
-                <form href="@Url.Action("DeleteComment","News",new {id=item.Id})" data-ajax="true" data-ajax-success="deleteItem(this)">
-                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                        Delete
-                    </button>
-                </form>
-            </a>
-        }
-    }
-</div>
-
-<script>
-    function deleteItem(form) {
-        $(form).parents('a').remove();
-    }
-</script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js" type="text/javascript"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/jquery.unobtrusive-ajax.js"></script>
 <script src="~/js/commentary.js"></script>
+
 <script>
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/ratingHub").build();
@@ -134,9 +111,28 @@
             return console.error(err.toString());
         });
         event.preventDefault();
+    
     };
 </script>
 
+<div id="comments">
+    @foreach (var item in Model.Commentaries)
+    {
+
+        if (item.Description != null)
+        {
+            <a>
+                <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
+                <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
+                <form id="input-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" click="removeButton(@item.Id)">
+                        Delete
+                    </button>
+                </form>
+            </a>
+        }
+    }
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>

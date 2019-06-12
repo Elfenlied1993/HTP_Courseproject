@@ -27,6 +27,7 @@ namespace Course.ITnews.Web.Hubs
                 commentId++;
             }
 
+            viewModel.AuthorName = user;
             viewModel.Id = commentId;
             viewModel.AuthorId = authorId;
             viewModel.Description = message;
@@ -35,6 +36,11 @@ namespace Course.ITnews.Web.Hubs
             commentaryService.Add(viewModel);
             Clients.All.SendAsync("ReceiveCommentary", viewModel.AuthorName, viewModel.Description, viewModel.AuthorId,
                 viewModel.NewsId, viewModel.Id);
+        }
+
+        public void DeleteCommentary(int commentId)
+        {
+            Clients.All.SendAsync("ReceiveDelete", commentId);
         }
 
     }

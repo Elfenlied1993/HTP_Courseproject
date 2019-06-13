@@ -64,7 +64,7 @@ namespace Course.ITnews.Domain.Services
             var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == news.Id);
             var ratings = unitOfWork.FindByCondition<Rating>(x => x.NewsId == news.Id);
 
-            result.Commentaries=new List<CommentaryViewModel>();
+            result.Commentaries = new List<CommentaryViewModel>();
             result.Commentaries = GetCommentaries(result);
             result.Ratings = new List<RatingViewModel>();
             foreach (var rating in ratings)
@@ -214,6 +214,8 @@ namespace Course.ITnews.Domain.Services
             var commentaries = new List<CommentaryViewModel>();
             foreach (var commentary in unitOfWork.GetAll<Commentary>())
             {
+                var tempLikes = unitOfWork.FindByCondition<Like>(x => x.CommentId == commentary.Id);
+                var resultLikes = mapper.Map<List<LikeViewModel>>(tempLikes);
                 if (commentary.NewsId == viewModel.Id)
                     commentaries.Add(new CommentaryViewModel()
                     {
@@ -222,7 +224,8 @@ namespace Course.ITnews.Domain.Services
                         Created = commentary.Created,
                         Description = commentary.Description,
                         Id = commentary.Id,
-                        NewsId = commentary.NewsId.GetValueOrDefault()
+                        NewsId = commentary.NewsId.GetValueOrDefault(),
+                        Likes = resultLikes
                     });
             }
 

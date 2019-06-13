@@ -14,6 +14,7 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public DateTime Created { get; set; }
         [Required]
         public string Description { get; set; }
+        public List<LikeViewModel> Likes { get; set; }
 
     }
 }

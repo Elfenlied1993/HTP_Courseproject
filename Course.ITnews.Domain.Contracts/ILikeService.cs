@@ -7,7 +7,8 @@ namespace Course.ITnews.Domain.Contracts
 {
     public interface ILikeService
     {
-        IEnumerable<LikeViewModel> GetAll();
+        IEnumerable<LikeViewModel> GetAll(int commentId);
+
         LikeViewModel Get(int id);
         void Add(LikeViewModel viewModel);
         void Delete(int id);

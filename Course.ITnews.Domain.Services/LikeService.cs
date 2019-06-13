@@ -21,9 +21,9 @@ namespace Course.ITnews.Domain.Services
             this.mapper = mapper;
         }
 
-        public IEnumerable<LikeViewModel> GetAll()
+        public IEnumerable<LikeViewModel> GetAll(int commentId)
         {
-            IEnumerable<Like> ratings = unitOfWork.GetAll<Like>();
+            var ratings = unitOfWork.FindByCondition<Like>(x=>x.CommentId==commentId);
             var result = mapper.Map<IEnumerable<LikeViewModel>>(ratings);
             return result;
         }

@@ -87,6 +87,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/20106ccf7e.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/jquery.unobtrusive-ajax.js"></script>
@@ -124,11 +125,15 @@
             <a>
                 <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
                 <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
-                <form id="input-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
-                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" click="removeButton(@item.Id)">
+                <form id="form-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" onclick="removeButton(@item.Id)">
                         Delete
                     </button>
                 </form>
+                <button type="button" class="like-button" title="Click to like" id="like-@item.Id" onclick="likeButton(@ViewData.Model.NewComment.AuthorId,@item.Id)">
+                    <i class="fa fa-thumbs-up"></i>
+                    <span class="like-count" id="count-@item.Id" >@item.Likes.Count</span>
+                </button>
             </a>
         }
     }

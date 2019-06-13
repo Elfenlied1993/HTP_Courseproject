@@ -20,23 +20,32 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Course.ITnews.Web.Controllers
 {
-    [Authorize(Roles="reader")]
+    [Authorize(Roles = "reader")]
     public class NewsController : Controller
     {
         private readonly UserManager<User> userManager;
         private readonly INewsService newsService;
         private readonly ICommentaryService commentaryService;
         private readonly IRatingService ratingService;
-        public NewsController(INewsService newsService, UserManager<User> userManager, ICommentaryService commentaryService, IRatingService ratingService)
+        private readonly ILikeService likeService;
+        public NewsController(INewsService newsService, UserManager<User> userManager, ICommentaryService commentaryService, IRatingService ratingService, ILikeService likeService)
         {
             this.newsService = newsService;
             this.userManager = userManager;
             this.commentaryService = commentaryService;
             this.ratingService = ratingService;
+            this.likeService = likeService;
         }
         [HttpPost]
         public IActionResult DeleteComment(int id)
         {
+            var likes = likeService.GetAll(id);
+            foreach (var like in likes)
+            {
+                if (like.CommentId == id)
+                    likeService.Delete(like.Id);
+            }
+
             commentaryService.Delete(id);
             return NoContent();
         }
@@ -46,7 +55,7 @@ namespace Course.ITnews.Web.Controllers
             return View(newsService.GetAll().ToList());
         }
         //GET News/Edit/1
-        [Authorize(Roles="admin,writer")]
+        [Authorize(Roles = "admin,writer")]
         public IActionResult Edit(int id)
         {
             NewsViewModel viewModel = newsService.Get(id);
@@ -76,7 +85,7 @@ namespace Course.ITnews.Web.Controllers
             return View(viewModel);
         }
         //GET News/Create
-        [Authorize(Roles="admin,writer")]
+        [Authorize(Roles = "admin,writer")]
         public IActionResult Create()
         {
             var viewModel = new NewsViewModel();
@@ -103,7 +112,7 @@ namespace Course.ITnews.Web.Controllers
         {
             NewsViewModel viewModel = newsService.Get(id);
             var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            viewModel.NewComment=new CommentaryViewModel();
+            viewModel.NewComment = new CommentaryViewModel();
             viewModel.NewComment.AuthorName = currentUser.UserName;
             viewModel.NewComment.AuthorId = currentUser.Id;
             viewModel.Commentaries = newsService.GetCommentaries(viewModel);
@@ -111,10 +120,9 @@ namespace Course.ITnews.Web.Controllers
             {
                 viewModel.Commentaries.Add(new CommentaryViewModel()
                 {
-                    Id = 1
+                    Id = 1,
                 });
             }
-
             ViewData["LastId"] = viewModel.Commentaries.LastOrDefault().Id;
             viewModel = newsService.GetTagsTitles(viewModel);
             return View(viewModel);
@@ -134,6 +142,10 @@ namespace Course.ITnews.Web.Controllers
 
             foreach (var comment in viewModel.Commentaries)
             {
+                foreach (var like in comment.Likes)
+                {
+                    likeService.Delete(like.Id);
+                }
                 commentaryService.Delete(comment.Id);
             }
             newsService.Delete(id);
@@ -144,5 +156,5 @@ namespace Course.ITnews.Web.Controllers
             viewModel.Categories = newsService.GetCategories();
             viewModel.Tags = newsService.GetTags();
         }
-   }
+    }
 }

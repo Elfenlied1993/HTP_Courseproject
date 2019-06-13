@@ -11,12 +11,14 @@ namespace Course.ITnews.Web.Hubs
     public class CommentariesHub : Hub
     {
         private readonly ICommentaryService commentaryService;
+        private readonly ILikeService likeService;
 
-        public CommentariesHub(ICommentaryService commentaryService)
+        public CommentariesHub(ICommentaryService commentaryService, ILikeService likeService)
         {
             this.commentaryService = commentaryService;
+            this.likeService = likeService;
         }
-
+        
         public void SendCommentary(string user, string message, int authorId, int newsId, int commentId)
         {
             CommentaryViewModel viewModel = new CommentaryViewModel();
@@ -43,5 +45,25 @@ namespace Course.ITnews.Web.Hubs
             Clients.All.SendAsync("ReceiveDelete", commentId);
         }
 
+        public void Like(int authorId, int commentId)
+        {
+            var existingLikes = likeService.GetAll(commentId);
+            LikeViewModel viewModel = new LikeViewModel();
+            viewModel.AuthorId = authorId;
+            viewModel.CommentId = commentId;
+            var existingLike = existingLikes.FirstOrDefault(x => x.AuthorId == authorId);
+            if (existingLike == null)
+            {
+                likeService.Add(viewModel);
+                var likes = likeService.GetAll(commentId);
+                Clients.All.SendAsync("ReceiveLike", viewModel.CommentId, likes.Count());
+            }
+            else
+            {
+                likeService.Delete(existingLike.Id);
+                var likes = likeService.GetAll(commentId);
+                Clients.All.SendAsync("ReceiveLike", viewModel.CommentId, likes.Count());
+            }
+        }
     }
 }

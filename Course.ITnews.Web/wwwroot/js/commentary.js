@@ -24,30 +24,56 @@ connectionComment.on("ReceiveCommentary",
             }).appendTo(cardDiv);
         var deleteButton = $('<form>',
             {
-                id:'form-'+commentId,
+                id: 'form-' + commentId,
                 method: 'post',
                 action: '/News/DeleteComment/' + commentId,
                 'data-ajax': 'true',
                 'data-ajax-success': 'deleteItem(this)'
             }).appendTo(cardDiv);
+
         var button = $('<button>',
             {
                 type: 'submit',
                 class: 'btn btn-sm btn-danger d-none d-md-inline-block',
                 text: 'Delete'
             }).appendTo(deleteButton);
+        var likeButton = $('<button>',
+            {
+                class: 'like-button',
+                title: 'Click to like'
+            }).appendTo(cardDiv);
+        var like = $('<i>',
+            {
+                class: 'fa fa-thumbs-up',
+            }).appendTo(likeButton);
+        var likeCount = $('<span>',
+            {
+                id:'count-' +commentId,
+                class: 'like-count',
+                value:0,
+                text: '0' 
+            }).appendTo(likeButton);
+        likeButton.click(function () {
+            connectionComment.invoke("Like", authorId, commentId).catch(function (err) {
+                return console.error(err.toString());
+            });
+        });
         button.click(function () {
             connectionComment.invoke("DeleteCommentary", commentId).catch(function (err) {
                 return console.error(err.toString());
             });
         });
     });
-connectionComment.on("ReceiveDelete", function(commentId) {
+connectionComment.on("ReceiveDelete", function (commentId) {
     var deleteForm = document.getElementById('form-' + commentId);
-    console.log(deleteForm);
     deleteItem(deleteForm);
 });
+connectionComment.on("ReceiveLike",
+    function (commentId, count) {
+        var counter = document.getElementById('count-' + commentId);
 
+        $(counter).replaceWith('<span class="like-count" id="count-'+commentId+'">' + count + '</span>');
+    });
 connectionComment.start().then(function () {
     document.getElementById("sendButton").disabled = false;
 }).catch(function (err) {
@@ -69,4 +95,10 @@ function removeButton(formId) {
     connectionComment.invoke("DeleteCommentary", formId).catch(function (err) {
         return console.error(err.toString());
     });
-}
+};
+
+function likeButton(authorId, commentId) {
+    connectionComment.invoke("Like", authorId, commentId).catch(function(err) {
+        return console.error(err.toString());
+    });
+};

@@ -16,6 +16,7 @@
               crossorigin="anonymous"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"/>
     </environment>
+
     <link rel="stylesheet" href="~/css/site.css" />
     </head>
 <body>
@@ -70,6 +71,42 @@
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+<script src="~/js/jquery.maskedinput.js"></script>
+<script src="~/js/jquery.jeditable.min.js"></script>
+<script src="~/js/jquery.jeditable.masked.min.js"></script>
+<script>
+    $('.edit').editable('/News/ChangeProfile',
+        {
+            submit: 'OK',
+            submitdata: {
+                username: function () {
+                    return $("#Username").val();
+                }
+            }
+        });
+    $('.editGender').editable('/News/ChangeProfile',
+        {
+            type: 'select',
+            data: '{"Male":"Male","Female":"Female","selected":"Male"}',
+            submit: 'OK',
+            submitdata: {
+                username: function () {
+                    return $("#Username").val();
+                }
+            }
+        });
+    $('.editDate').editable('/News/ChangeProfile',
+        {
+            type: 'masked',
+            mask: '99/99/9999',
+            submit: 'OK',
+            submitdata: {
+                username: function () {
+                    return $("#Username").val();
+                }
+            }
+        });
+</script>
 
     @RenderSection("Scripts", required: false)
 </body>

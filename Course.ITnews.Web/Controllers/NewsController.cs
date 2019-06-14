@@ -49,6 +49,22 @@ namespace Course.ITnews.Web.Controllers
             commentaryService.Delete(id);
             return NoContent();
         }
+
+        [HttpPost]
+        public async Task<string> ChangeProfile(string id,string value,string username)
+        {
+            var currentUser = userManager.Users.FirstOrDefault(x => x.UserName == username);
+            if (id == "DateOfBirth")
+            {
+                DateTime date = Convert.ToDateTime(value);
+                typeof(User).GetProperty(id).SetValue(currentUser, date);
+                await userManager.UpdateAsync(currentUser);
+                return value;
+            }
+            typeof(User).GetProperty(id).SetValue(currentUser, value);
+            await userManager.UpdateAsync(currentUser);
+            return value;
+        }
         public IActionResult Index()
         {
 

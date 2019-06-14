@@ -49,11 +49,10 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
             [DataType(DataType.Text)]
             [Display(Name = "Full name")]
             public string Name { get; set; }
-            [Required]
             [Display(Name = "Birth Date")]
+            [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",ApplyFormatInEditMode = true)]
             [DataType(DataType.Date)]
             public DateTime DateOfBirth { get; set; }
-            [Required]
             [Display(Name = "Your specialization")]
             [DataType(DataType.Text)]
             public virtual string Specialization { get; set; }
@@ -61,11 +60,9 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Who are you?")]
             [DataType(DataType.Text)]
             public virtual string Gender { get; set; }
-            [Required]
             [Display(Name = "Country")]
             [DataType(DataType.Text)]
             public virtual string Country { get; set; }
-            [Required]
             [EmailAddress]
             public string Email { get; set; }
             [Display(Name = "User Photo")]
@@ -76,7 +73,6 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
         }
-
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -151,35 +147,10 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
                 await Input.UserPhoto.CopyToAsync(memoryStream);
                 user.UserPhoto = memoryStream.ToArray();
             }
-
-            if (Input.Name != user.Name)
-            {
-                user.Name = Input.Name;
-            }
-
-            if (Input.DateOfBirth != user.DateOfBirth)
-            {
-                user.DateOfBirth = Input.DateOfBirth;
-            }
-
-            if (Input.Country != user.Country)
-            {
-                user.Country = Input.Country;
-            }
-
-            if (Input.Gender != user.Gender)
-            {
-                user.Gender = Input.Gender;
-            }
-
-            if (Input.Specialization != user.Specialization)
-            {
-                user.Specialization = Input.Specialization;
-            }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, phoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);

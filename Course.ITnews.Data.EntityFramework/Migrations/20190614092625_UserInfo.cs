@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class likes : Migration
+    public partial class UserInfo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,7 +42,13 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    UserPhoto = table.Column<byte[]>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Specialization = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    Gender = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190611120300_likes")]
-    partial class likes
+    [Migration("20190614092625_UserInfo")]
+    partial class UserInfo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -166,14 +166,22 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Country");
+
+                    b.Property<DateTime>("DateOfBirth");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("Gender");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -189,10 +197,14 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.Property<string>("SecurityStamp");
 
+                    b.Property<string>("Specialization");
+
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
+
+                    b.Property<byte[]>("UserPhoto");
 
                     b.HasKey("Id");
 

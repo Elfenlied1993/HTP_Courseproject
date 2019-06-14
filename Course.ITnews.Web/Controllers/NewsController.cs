@@ -45,7 +45,7 @@ namespace Course.ITnews.Web.Controllers
                 if (like.CommentId == id)
                     likeService.Delete(like.Id);
             }
-
+            
             commentaryService.Delete(id);
             return NoContent();
         }

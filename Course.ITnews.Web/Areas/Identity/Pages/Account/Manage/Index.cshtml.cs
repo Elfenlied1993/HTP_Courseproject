@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Course.ITnews.Data.Contracts.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -41,8 +46,31 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Full name")]
+            public string Name { get; set; }
+            [Required]
+            [Display(Name = "Birth Date")]
+            [DataType(DataType.Date)]
+            public DateTime DateOfBirth { get; set; }
+            [Required]
+            [Display(Name = "Your specialization")]
+            [DataType(DataType.Text)]
+            public virtual string Specialization { get; set; }
+            [Required]
+            [Display(Name = "Who are you?")]
+            [DataType(DataType.Text)]
+            public virtual string Gender { get; set; }
+            [Required]
+            [Display(Name = "Country")]
+            [DataType(DataType.Text)]
+            public virtual string Country { get; set; }
+            [Required]
             [EmailAddress]
             public string Email { get; set; }
+            [Display(Name = "User Photo")]
+            public IFormFile UserPhoto { get; set; }
+            public string Photo { get; set; }
 
             [Phone]
             [Display(Name = "Phone number")]
@@ -57,14 +85,33 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+
+            var genders = new List<string>
+            {
+                "Male",
+                "Female"
+            };
+
+            ViewData["Genders"] = new SelectList(genders);
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            string file = null;
+            if (user.UserPhoto != null)
+            {
+                file = Convert.ToBase64String(user.UserPhoto);
+            }
 
             Username = userName;
 
             Input = new InputModel
             {
+                Name = user.Name,
+                Country = user.Country,
+                DateOfBirth = user.DateOfBirth,
+                Gender = user.Gender,
+                Specialization = user.Specialization,
+                Photo = file,
                 Email = email,
                 PhoneNumber = phoneNumber
             };
@@ -73,9 +120,9 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
 
             return Page();
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -98,6 +145,37 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.UserPhoto != null)
+            {
+                var memoryStream = new MemoryStream();
+                await Input.UserPhoto.CopyToAsync(memoryStream);
+                user.UserPhoto = memoryStream.ToArray();
+            }
+
+            if (Input.Name != user.Name)
+            {
+                user.Name = Input.Name;
+            }
+
+            if (Input.DateOfBirth != user.DateOfBirth)
+            {
+                user.DateOfBirth = Input.DateOfBirth;
+            }
+
+            if (Input.Country != user.Country)
+            {
+                user.Country = Input.Country;
+            }
+
+            if (Input.Gender != user.Gender)
+            {
+                user.Gender = Input.Gender;
+            }
+
+            if (Input.Specialization != user.Specialization)
+            {
+                user.Specialization = Input.Specialization;
+            }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -109,6 +187,7 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

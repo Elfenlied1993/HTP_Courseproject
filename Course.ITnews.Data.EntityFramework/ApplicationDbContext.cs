@@ -42,7 +42,6 @@ namespace Course.ITnews.Data.EntityFramework
             modelBuilder.ApplyConfiguration(new NewsEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NewsTagEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
         }
 
         public override int SaveChanges()

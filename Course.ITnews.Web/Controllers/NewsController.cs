@@ -8,7 +8,10 @@ using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts;
 using Course.ITnews.Domain.Contracts.ViewModels;
 using Course.ITnews.Web.Models;
+using Course.ITnews.Web.Services;
 using Markdig;
+using Markdig.Helpers;
+using Markdig.Syntax;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +23,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Course.ITnews.Web.Controllers
 {
-    [Authorize(Roles = "reader")]
+    [AllowAnonymous]
     public class NewsController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -37,6 +40,7 @@ namespace Course.ITnews.Web.Controllers
             this.likeService = likeService;
         }
         [HttpPost]
+        [Authorize]
         public IActionResult DeleteComment(int id)
         {
             var likes = likeService.GetAll(id);
@@ -49,7 +53,7 @@ namespace Course.ITnews.Web.Controllers
             commentaryService.Delete(id);
             return NoContent();
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<string> ChangeProfile(string id,string value,string username)
         {
@@ -67,8 +71,63 @@ namespace Course.ITnews.Web.Controllers
         }
         public IActionResult Index()
         {
-
             return View(newsService.GetAll().ToList());
+        }
+
+        public async Task<IActionResult> UsersNews(string username,string sortOrder,string searchString,int? pageNumber,string currentFilter)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CategorySortParm"] = sortOrder == "Category" ? "cat_desc" : "Category";
+            ViewData["Username"] = username;
+            ViewData["CurrentFilter"] = searchString;
+            var allNews = newsService.GetAll();
+            var result = new List<NewsViewModel>();
+            
+            foreach (var news in allNews)
+            {
+                if (news.Author == username)
+                {
+                    result.Add(news);
+                }
+            }
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString)).ToList();
+            }
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    result = result.OrderByDescending(s => s.Title).ToList();
+                    break;
+                case "Date":
+                    result = result.OrderBy(s => s.Created).ToList();
+                    break;
+                case "date_desc":
+                    result= result.OrderByDescending(s => s.Created).ToList();
+                    break;
+                case "Category":
+                    result = result.OrderBy(s => s.Category).ToList();
+                    break;
+                case "cat_desc":
+                    result = result.OrderByDescending(s => s.Category).ToList();
+                    break;
+                default:
+                    result = result.OrderBy(s => s.Title).ToList();
+                    break;
+            }
+            int pageSize = 1;
+            return View(await PaginatedList<NewsViewModel>.CreateAsync(result.AsQueryable().Cast<NewsViewModel>(),pageNumber??1,pageSize));
         }
         //GET News/Edit/1
         [Authorize(Roles = "admin,writer")]
@@ -82,6 +141,7 @@ namespace Course.ITnews.Web.Controllers
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
+        [Authorize]
         //POST News/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,6 +160,7 @@ namespace Course.ITnews.Web.Controllers
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
+
         //GET News/Create
         [Authorize(Roles = "admin,writer")]
         public IActionResult Create()
@@ -108,6 +169,7 @@ namespace Course.ITnews.Web.Controllers
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
+        [Authorize]
         //POST News/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -128,9 +190,12 @@ namespace Course.ITnews.Web.Controllers
         {
             NewsViewModel viewModel = newsService.Get(id);
             var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            viewModel.NewComment = new CommentaryViewModel();
-            viewModel.NewComment.AuthorName = currentUser.UserName;
-            viewModel.NewComment.AuthorId = currentUser.Id;
+            if (currentUser != null)
+            {
+                viewModel.NewComment = new CommentaryViewModel();
+                viewModel.NewComment.AuthorName = currentUser.UserName;
+                viewModel.NewComment.AuthorId = currentUser.Id;
+            }
             viewModel.Commentaries = newsService.GetCommentaries(viewModel);
             if (viewModel.Commentaries.Count == 0)
             {
@@ -148,6 +213,7 @@ namespace Course.ITnews.Web.Controllers
         {
             return RedirectToAction("Details");
         }
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var viewModel = newsService.Get(id);

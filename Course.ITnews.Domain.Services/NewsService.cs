@@ -8,6 +8,7 @@ using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts;
 using Course.ITnews.Domain.Contracts.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Course.ITnews.Domain.Services
 {
@@ -31,6 +32,9 @@ namespace Course.ITnews.Domain.Services
                 User user = unitOfWork.Get<User>(post.AuthorId);
                 post.Author = user.UserName;
                 var ratings = unitOfWork.FindByCondition<Rating>(x => x.NewsId == post.Id);
+                var tags = unitOfWork.FindByCondition<NewsTag>(x => x.NewsId == post.Id);
+                Category category = unitOfWork.Get<Category>(post.CategoryId);
+                post.Category = category.Title;
                 post.Ratings = new List<RatingViewModel>();
                 foreach (var rating in ratings)
                 {
@@ -49,7 +53,10 @@ namespace Course.ITnews.Domain.Services
                 }
                 post.AverageRating = allRating / post.Ratings.Count;
                 post.TagsIds = new List<int>();
-
+                foreach (var tag in tags)
+                {
+                    post.TagsIds.Add(tag.TagId);
+                }
             }
             return result;
         }
@@ -208,7 +215,6 @@ namespace Course.ITnews.Domain.Services
             }
             return tags;
         }
-
         public List<CommentaryViewModel> GetCommentaries(NewsViewModel viewModel)
         {
             var commentaries = new List<CommentaryViewModel>();

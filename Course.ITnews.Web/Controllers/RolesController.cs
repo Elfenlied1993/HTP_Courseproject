@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course.ITnews.Web.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         readonly RoleManager<IdentityRole<int>> _roleManager;

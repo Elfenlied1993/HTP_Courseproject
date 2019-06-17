@@ -45,7 +45,6 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Full name")]
             public string Name { get; set; }
@@ -56,7 +55,6 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Your specialization")]
             [DataType(DataType.Text)]
             public virtual string Specialization { get; set; }
-            [Required]
             [Display(Name = "Who are you?")]
             [DataType(DataType.Text)]
             public virtual string Gender { get; set; }
@@ -150,7 +148,7 @@ namespace Course.ITnews.Web.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);

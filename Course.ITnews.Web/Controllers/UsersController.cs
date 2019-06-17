@@ -4,24 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts.ViewModels;
+using Course.ITnews.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course.ITnews.Web.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
-        private RoleManager<IdentityRole<int>> _roleManager; 
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
         public UsersController(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
+
         public IActionResult Index() => View(_userManager.Users.ToList());
 
-        public async Task<IActionResult> Edit(string userId)
+        public async Task<IActionResult> EditRole(string userId)
         {
             User user = await _userManager.FindByIdAsync(userId);
             if (user != null)
@@ -41,7 +45,7 @@ namespace Course.ITnews.Web.Controllers
             return NotFound();
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(string userId, List<string> roles)
+        public async Task<IActionResult> EditRole(string userId, List<string> roles)
         {
             User user = await _userManager.FindByIdAsync(userId);
             if (user != null)
@@ -60,6 +64,9 @@ namespace Course.ITnews.Web.Controllers
 
             return NotFound();
         }
+
+
+
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {

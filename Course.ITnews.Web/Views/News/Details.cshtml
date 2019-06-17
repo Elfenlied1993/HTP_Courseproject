@@ -16,17 +16,11 @@
 
     <dl class="row">
 
-        <dt class="col-sm-2" ">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ShortDescription)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FullDescription)
@@ -72,17 +66,18 @@
         <span class="mt-3 pl-2">@Model.Ratings.Count() users rated</span>
     </div>
 </div>
-
-<div class="input-group mb-3">
-    <input type="hidden" id="authorId" value="@Html.ViewData.Model.NewComment.AuthorId" />
-    <input type="hidden" id="userInput" value="@Html.ViewData.Model.NewComment.AuthorName" />
-    <input type="text" id="messageInput" class="form-control" placeholder="Write your message" aria-label="Write your message" aria-describedby="button-addon2">
-    <div class="input-group-append">
-        <button class="btn btn-primary" type="button" id="sendButton" value="Send">Send</button>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="input-group mb-3">
+        <input type="hidden" id="authorId" value="@Html.ViewData.Model.NewComment.AuthorId" />
+        <input type="hidden" id="userInput" value="@Html.ViewData.Model.NewComment.AuthorName" />
+        <input type="text" id="messageInput" class="form-control" placeholder="Write your message" aria-label="Write your message" aria-describedby="button-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="button" id="sendButton" value="Send">Send</button>
+        </div>
     </div>
-</div>
-<input value="@ViewData["LastId"]" type="hidden" id="commentId">
-
+    <input value="@ViewData["LastId"]" type="hidden" id="commentId">
+}
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -112,33 +107,34 @@
             return console.error(err.toString());
         });
         event.preventDefault();
-    
+
     };
 </script>
-
-<div id="comments">
-    @foreach (var item in Model.Commentaries)
-    {
-
-        if (item.Description != null)
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="comments">
+        @foreach (var item in Model.Commentaries)
         {
-            <a>
-                <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
-                <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
-                <form id="form-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
-                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" onclick="removeButton(@item.Id)">
-                        Delete
-                    </button>
-                </form>
-                <button type="button" class="like-button" title="Click to like" id="like-@item.Id" onclick="likeButton(@ViewData.Model.NewComment.AuthorId,@item.Id)">
-                    <i class="fa fa-thumbs-up"></i>
-                    <span class="like-count" id="count-@item.Id" >@item.Likes.Count</span>
-                </button>
-            </a>
-        }
-    }
-</div>
 
+            if (item.Description != null)
+            {
+                <a>
+                    <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
+                    <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
+                    <form id="form-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" onclick="removeButton(@item.Id)">
+                            Delete
+                        </button>
+                    </form>
+                    <button type="button" class="like-button" title="Click to like" id="like-@item.Id" onclick="likeButton(@ViewData.Model.NewComment.AuthorId, @item.Id)">
+                        <i class="fa fa-thumbs-up"></i>
+                        <span class="like-count" id="count-@item.Id">@item.Likes.Count</span>
+                    </button>
+                </a>
+            }
+        }
+    </div>
+}
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

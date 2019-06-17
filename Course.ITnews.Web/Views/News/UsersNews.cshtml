@@ -1,0 +1,85 @@
+﻿@model Course.ITnews.Web.Services.PaginatedList<Course.ITnews.Domain.Contracts.ViewModels.NewsViewModel>
+
+@{
+    ViewData["Title"] = "UsersNews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>UsersNews</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-action="UsersNews" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="hidden" name="username" asp-for="@ViewData["username"]">
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="UsersNews" asp-route-username="@ViewData["username"]">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="UsersNews" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-username="@ViewData["username"]">Title</a>
+            </th>
+            <th>
+                Short Description
+            </th>
+            <th>
+                <a asp-action="UsersNews" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-username="@ViewData["username"]">Created</a>
+            </th>
+            <th>
+                <a asp-action="UsersNews" asp-route-sortOrder="@ViewData["CategorySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-username="@ViewData["username"]">Category</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShortDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="UsersNews"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-username="@ViewData["username"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="UsersNews"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-username="@ViewData["username"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

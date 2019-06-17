@@ -69,14 +69,20 @@ namespace Course.ITnews.Web.Controllers
             await userManager.UpdateAsync(currentUser);
             return value;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            return View(newsService.GetAll().ToList());
+            var result = newsService.GetAll().ToList();
+            result = result.OrderBy(x => x.AverageRating).ToList();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString)).ToList();
+                result.OrderBy(x => x.AverageRating).ToList();
+            }
+            return View(result);
         }
 
-        public async Task<IActionResult> UsersNews(string username,string sortOrder,string searchString,int? pageNumber,string currentFilter)
+        public IActionResult UsersNews(string username,string sortOrder,string searchString)
         {
-            ViewData["CurrentSort"] = sortOrder;
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CategorySortParm"] = sortOrder == "Category" ? "cat_desc" : "Category";
@@ -91,15 +97,6 @@ namespace Course.ITnews.Web.Controllers
                 {
                     result.Add(news);
                 }
-            }
-
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
             }
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -126,8 +123,7 @@ namespace Course.ITnews.Web.Controllers
                     result = result.OrderBy(s => s.Title).ToList();
                     break;
             }
-            int pageSize = 1;
-            return View(await PaginatedList<NewsViewModel>.CreateAsync(result.AsQueryable().Cast<NewsViewModel>(),pageNumber??1,pageSize));
+            return View(result);
         }
         //GET News/Edit/1
         [Authorize(Roles = "admin,writer")]
@@ -208,11 +204,7 @@ namespace Course.ITnews.Web.Controllers
             viewModel = newsService.GetTagsTitles(viewModel);
             return View(viewModel);
         }
-        [HttpPost]
-        public IActionResult Index(NewsViewModel viewModel)
-        {
-            return RedirectToAction("Details");
-        }
+
         [Authorize]
         public IActionResult Delete(int id)
         {

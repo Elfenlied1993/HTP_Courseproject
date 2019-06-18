@@ -7,6 +7,7 @@ using Course.ITnews.Data.Contracts;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts;
 using Course.ITnews.Domain.Contracts.ViewModels;
+using Course.ITnews.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.ObjectPool;
@@ -38,6 +39,7 @@ namespace Course.ITnews.Domain.Services
                 Category category = unitOfWork.Get<Category>(post.CategoryId);
                 post.Category = category.Title;
                 post.Ratings = new List<RatingViewModel>();
+
                 foreach (var rating in ratings)
                 {
                     post.Ratings.Add(new RatingViewModel()
@@ -59,6 +61,17 @@ namespace Course.ITnews.Domain.Services
                 {
                     post.TagsIds.Add(tag.TagId);
                 }
+                var newsTags = unitOfWork.GetAll<Tag>();
+                post.TagsTitles = new List<string>();
+                foreach (var tagId in post.TagsIds)
+                {
+                    var tag = newsTags.FirstOrDefault(x => x.Id == tagId);
+                    if (tag != null)
+                    {
+                        post.TagsTitles.Add(tag.Title);
+                    }
+                }
+
             }
             return result;
         }
@@ -91,7 +104,6 @@ namespace Course.ITnews.Domain.Services
             {
                 allRating += rating.RatingNumber;
             }
-
             result.AverageRating = allRating / result.Ratings.Count;
             result.TagsIds = new List<int>();
             foreach (var tag in tags)
@@ -255,6 +267,19 @@ namespace Course.ITnews.Domain.Services
             }
 
             return viewModel;
+        }
+
+        public List<TagModel> TagsCloud()
+        {
+            var tagModels = new List<TagModel>();
+            var tags = unitOfWork.GetAll<Tag>();
+            foreach (var tag in tags)
+            {
+                var newsTags = unitOfWork.FindByCondition<NewsTag>(x => x.TagId == tag.Id);
+                tagModels.Add(new TagModel(tag.Title,newsTags.Count()));
+            }
+
+            return tagModels;
         }
     }
 }

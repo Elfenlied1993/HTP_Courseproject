@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts.ViewModels;
+using Course.ITnews.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Course.ITnews.Domain.Contracts
@@ -14,6 +15,7 @@ namespace Course.ITnews.Domain.Contracts
         NewsViewModel Get(int id);
         void Add(NewsViewModel viewModel);
         void Edit(NewsViewModel viewModel);
+        List<TagModel> TagsCloud();
         void Delete(int id);
         List<SelectListItem> GetCategories();
         NewsViewModel GetTagsTitles(NewsViewModel viewModel);

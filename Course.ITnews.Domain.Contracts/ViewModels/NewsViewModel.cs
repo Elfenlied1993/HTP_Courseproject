@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Course.ITnews.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Course.ITnews.Domain.Contracts.ViewModels
@@ -35,5 +36,6 @@ namespace Course.ITnews.Domain.Contracts.ViewModels
         public double RatingNumber { get; set; }
         public double AverageRating { get; set; }
         public int UsersRated { get; set; }
+        public List<TagModel> Cloud { get; set; }
     }
 }

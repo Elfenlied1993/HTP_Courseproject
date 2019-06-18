@@ -13,27 +13,35 @@
         </p>
     </div>
 </form>
+Tags cloud: <br />
+<div style="width: 400px; justify-content: center; background-color: white;" class="form-actions no-color">
+    @for (int i = 0; i < Model.ElementAt(0).Cloud.Count; i++)
+    {
+        <a asp-action="Index" asp-route-searchString="@Model.ElementAt(0).Cloud[i].Tag"><span style="font-size:@(Model.ElementAt(0).Cloud[i].HTMLStyle);">@Model.ElementAt(0).Cloud[i].Tag</span></a>
+    }
+</div>
+
 @foreach (var item in Model)
 {
 
     <div class="card">
         <div class="card-header  justify-content-between d-flex">
             <div><a asp-action="Details" asp-controller="Users" asp-route-userId="@item.AuthorId">@Html.DisplayFor(modelItem => item.Author)</a></div>
-            <div>@Html.DisplayFor(modelItem => item.Updated)</div>            
-            </div>
+            <div>@Html.DisplayFor(modelItem => item.Updated)</div>
+        </div>
         <div class="card-body">
             <input type="hidden" asp-for="@item.Id" id="newsId" />
             <h5 class="card-title">
                 @Html.DisplayFor(modelItem => item.Title)
-                
+
             </h5>
             <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
 
             <label class="mt-5" for="input-2">Average rating:</label>
             <div class="justify-content-between d-flex">
                 <div class="d-flex">
-                <input id="input-2" name="input-2" value="@item.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1" />
-                <span class="mt-3 pl-2">@item.Ratings.Count() users rated</span>
+                    <input id="input-2" name="input-2" value="@item.AverageRating" change="postRating" class="rating rating-loading" data-ajax="true" data-ajax-method="post" data-ajax-complete="postRating" data-step="1" />
+                    <span class="mt-3 pl-2">@item.Ratings.Count() users rated</span>
                 </div>
                 <div class="blockquote text-right pr-3 ">
                     <a href="@Url.Action("Details", "News", new {id = item.Id})" class="btn btn-primary">Details</a>

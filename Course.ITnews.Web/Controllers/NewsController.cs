@@ -75,9 +75,11 @@ namespace Course.ITnews.Web.Controllers
             result = result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
-                result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString)).ToList();
+                result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString) || s.TagsTitles.Contains(searchString)).ToList();
                 result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
             }
+
+            result.ElementAt(0).Cloud = newsService.TagsCloud();
             return View(result);
         }
 

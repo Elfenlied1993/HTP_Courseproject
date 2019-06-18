@@ -49,13 +49,13 @@ namespace Course.ITnews.Web.Controllers
                 if (like.CommentId == id)
                     likeService.Delete(like.Id);
             }
-            
+
             commentaryService.Delete(id);
             return NoContent();
         }
         [Authorize(Roles = "admin,writer")]
         [HttpPost]
-        public async Task<string> ChangeProfile(string id,string value,string username)
+        public async Task<string> ChangeProfile(string id, string value, string username)
         {
             var currentUser = userManager.Users.FirstOrDefault(x => x.UserName == username);
             if (id == "DateOfBirth")
@@ -72,18 +72,18 @@ namespace Course.ITnews.Web.Controllers
         public IActionResult Index(string searchString)
         {
             var result = newsService.GetAll().ToList();
-            result = result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
+            result = result.OrderByDescending(x => x.AverageRating).ThenByDescending(x => x.Updated).ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
                 result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString) || s.TagsTitles.Contains(searchString)).ToList();
-                result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
+                result.OrderByDescending(x => x.AverageRating).ThenByDescending(x => x.Updated).ToList();
             }
 
             result.ElementAt(0).Cloud = newsService.TagsCloud();
             return View(result);
         }
 
-        public IActionResult UsersNews(string username,string sortOrder,string searchString)
+        public IActionResult UsersNews(string username, string sortOrder, string searchString)
         {
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
@@ -92,7 +92,7 @@ namespace Course.ITnews.Web.Controllers
             ViewData["CurrentFilter"] = searchString;
             var allNews = newsService.GetAll();
             var result = new List<NewsViewModel>();
-            
+
             foreach (var news in allNews)
             {
                 if (news.Author == username)
@@ -113,7 +113,7 @@ namespace Course.ITnews.Web.Controllers
                     result = result.OrderBy(s => s.Created).ToList();
                     break;
                 case "date_desc":
-                    result= result.OrderByDescending(s => s.Created).ToList();
+                    result = result.OrderByDescending(s => s.Created).ToList();
                     break;
                 case "Category":
                     result = result.OrderBy(s => s.Category).ToList();
@@ -131,22 +131,16 @@ namespace Course.ITnews.Web.Controllers
         [Authorize(Roles = "admin,writer")]
         public IActionResult Edit(int id)
         {
-                var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                var userRoles = userManager.GetRolesAsync(currentUser);
 
-                NewsViewModel viewModel = newsService.Get(id);
-                if (viewModel.Author == currentUser.UserName ||
-                    userRoles.ConfigureAwait(false).GetAwaiter().GetResult().Contains("admin"))
+            NewsViewModel viewModel = newsService.Get(id);
+                if (viewModel == null)
                 {
-                    if (viewModel == null)
-                    {
-                        return NotFound();
-                    }
-
-                    PopPopulateLists(viewModel);
+                    return NotFound();
                 }
 
-                return View(viewModel);
+                PopPopulateLists(viewModel);
+
+            return View(viewModel);
         }
         [Authorize(Roles = "admin,writer")]
         //POST News/Edit/1
@@ -159,18 +153,11 @@ namespace Course.ITnews.Web.Controllers
             {
                 return NotFound();
             }
-
-            var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var userRoles = userManager.GetRolesAsync(currentUser);
-            if (viewModel.Author == currentUser.UserName ||
-                userRoles.ConfigureAwait(false).GetAwaiter().GetResult().Contains("admin"))
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    viewModel.Updated = DateTime.Now;
-                    newsService.Edit(viewModel);
-                    return RedirectToAction("Index");
-                }
+                viewModel.Updated = DateTime.Now;
+                newsService.Edit(viewModel);
+                return RedirectToAction("Index");
             }
 
             PopPopulateLists(viewModel);

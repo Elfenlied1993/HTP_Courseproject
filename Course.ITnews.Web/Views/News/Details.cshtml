@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.Author)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Author)
+            <a asp-action="Details" asp-controller="Users" asp-route-userId="@Model.AuthorId"> @Html.DisplayFor(model => model.Author)</a>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
@@ -119,8 +119,9 @@
             if (item.Description != null)
             {
                 <a>
-                    <div class="card-header">@Html.DisplayFor(modelItem => item.AuthorName) says:</div>
+                    <div class="card-header">@item.AuthorName says:</div>
                     <div class="card">@Html.DisplayFor(modelItem => item.Description)</div>
+                   
                     <form id="form-@item.Id" asp-action="DeleteComment" asp-route-id="@item.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
                         <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" onclick="removeButton(@item.Id)">
                             Delete

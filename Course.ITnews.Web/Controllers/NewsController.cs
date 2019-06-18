@@ -72,11 +72,11 @@ namespace Course.ITnews.Web.Controllers
         public IActionResult Index(string searchString)
         {
             var result = newsService.GetAll().ToList();
-            result = result.OrderByDescending(x => x.Updated).ThenByDescending(x=>x.AverageRating).ToList();
+            result = result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
                 result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString)).ToList();
-                result.OrderByDescending(x => x.Updated).ThenByDescending(x=>x.AverageRating).ToList();
+                result.OrderByDescending(x => x.AverageRating).ThenByDescending(x=>x.Updated).ToList();
             }
             return View(result);
         }

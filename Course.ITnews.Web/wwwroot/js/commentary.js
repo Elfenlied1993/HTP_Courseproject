@@ -1,6 +1,7 @@
 ﻿"use strict";
 var connectionComment = new signalR.HubConnectionBuilder().withUrl("/commentaryHub").build();
 function deleteItem(form) {
+    console.log(form);
     $(form).parents('a').remove();
 }
 //Disable send button until connection is established
@@ -15,13 +16,18 @@ connectionComment.on("ReceiveCommentary",
         var cardHeader = $('<div>',
             {
                 class: 'card-header',
-                text: user + ' says:'
             }).appendTo(cardDiv);
+      
         var card = $('<div>',
             {
                 class: 'card',
                 text: encodedMsg
             }).appendTo(cardDiv);
+        var user = $('<a>',
+            {
+                text:user+' says',
+                href: "/Users/Details?userId=" + authorId,
+            }).appendTo(cardHeader);
         var deleteButton = $('<form>',
             {
                 id: 'form-' + commentId,

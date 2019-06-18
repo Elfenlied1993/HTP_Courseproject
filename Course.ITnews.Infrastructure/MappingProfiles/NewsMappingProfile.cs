@@ -27,6 +27,7 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
                 .ForMember(dest=>dest.ShortDescription,c=>c.MapFrom(src=>src.ShortDescription))
                 .ForMember(dest=>dest.Created,c=>c.MapFrom(src=>src.Created))
                 .ForMember(dest=>dest.Title,c=>c.MapFrom(src=>src.Title))
+                .ForMember(dest=>dest.Updated,c=>c.MapFrom(src=>src.Updated))
                 .ForAllOtherMembers(c=>c.Ignore());
         }
 
@@ -40,6 +41,7 @@ namespace Course.ITnews.Infrastructure.MappingProfiles
                 .ForMember(dest => dest.ShortDescription, c => c.MapFrom(src => src.ShortDescription))
                 .ForMember(dest => dest.Title, c => c.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Created, c => c.MapFrom(src => src.Created))
+                .ForMember(dest => dest.Updated, c => c.MapFrom(src => src.Updated))
                 .ForAllOtherMembers(c=>c.Ignore());
         }
     }

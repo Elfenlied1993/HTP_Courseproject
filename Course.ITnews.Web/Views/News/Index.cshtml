@@ -17,12 +17,16 @@
 {
 
     <div class="card">
-        <div class="card-header">
-            @Html.DisplayFor(modelItem => item.Author)
-        </div>
+        <div class="card-header  justify-content-between d-flex">
+            <div>@Html.DisplayFor(modelItem => item.Author)</div>
+            <div>@Html.DisplayFor(modelItem => item.Updated)</div>            
+            </div>
         <div class="card-body">
             <input type="hidden" asp-for="@item.Id" id="newsId" />
-            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+            <h5 class="card-title">
+                @Html.DisplayFor(modelItem => item.Title)
+                
+            </h5>
             <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
 
             <label class="mt-5" for="input-2">Average rating:</label>

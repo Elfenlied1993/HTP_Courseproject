@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
-    public partial class UserInfo : Migration
+    public partial class Updated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -197,6 +197,7 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     ShortDescription = table.Column<string>(nullable: false),
                     FullDescription = table.Column<string>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
+                    Updated = table.Column<DateTime>(nullable: false),
                     AuthorId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: true)
                 },

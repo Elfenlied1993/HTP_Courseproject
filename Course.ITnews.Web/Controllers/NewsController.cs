@@ -72,11 +72,11 @@ namespace Course.ITnews.Web.Controllers
         public IActionResult Index(string searchString)
         {
             var result = newsService.GetAll().ToList();
-            result = result.OrderBy(x => x.AverageRating).ToList();
+            result = result.OrderByDescending(x => x.Updated).ThenByDescending(x=>x.AverageRating).ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
                 result = result.Where(s => s.Title.Contains(searchString) || s.ShortDescription.Contains(searchString)).ToList();
-                result.OrderBy(x => x.AverageRating).ToList();
+                result.OrderByDescending(x => x.Updated).ThenByDescending(x=>x.AverageRating).ToList();
             }
             return View(result);
         }
@@ -150,6 +150,7 @@ namespace Course.ITnews.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                viewModel.Updated=DateTime.Now;
                 newsService.Edit(viewModel);
                 return RedirectToAction("Index");
             }
@@ -173,6 +174,7 @@ namespace Course.ITnews.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                viewModel.Updated = viewModel.Created;
                 var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 viewModel.AuthorId = currentUser.Id;
                 newsService.Add(viewModel);

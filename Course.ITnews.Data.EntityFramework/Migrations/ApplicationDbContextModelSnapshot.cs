@@ -97,6 +97,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<DateTime>("Updated");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");

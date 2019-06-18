@@ -12,6 +12,7 @@ namespace Course.ITnews.Data.Contracts.Entities
         public virtual string ShortDescription { get; set; }
         public virtual string FullDescription { get; set; }
         public virtual DateTime Created { get; set; }
+        public virtual DateTime Updated { get; set; }
         public virtual User Author { get; set; }
         public virtual int? AuthorId { get; set; }
         public virtual Category Category { get; set; }

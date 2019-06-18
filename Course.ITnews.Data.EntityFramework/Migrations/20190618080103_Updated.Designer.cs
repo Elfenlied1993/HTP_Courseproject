@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Course.ITnews.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190614092625_UserInfo")]
-    partial class UserInfo
+    [Migration("20190618080103_Updated")]
+    partial class Updated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,6 +98,8 @@ namespace Course.ITnews.Data.EntityFramework.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
+
+                    b.Property<DateTime>("Updated");
 
                     b.HasKey("Id");
 

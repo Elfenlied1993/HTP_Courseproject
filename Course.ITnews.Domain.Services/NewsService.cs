@@ -7,6 +7,7 @@ using Course.ITnews.Data.Contracts;
 using Course.ITnews.Data.Contracts.Entities;
 using Course.ITnews.Domain.Contracts;
 using Course.ITnews.Domain.Contracts.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.ObjectPool;
 
@@ -16,11 +17,12 @@ namespace Course.ITnews.Domain.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-
-        public NewsService(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly UserManager<User> userManager;
+        public NewsService(IMapper mapper, IUnitOfWork unitOfWork, UserManager<User> userManager)
         {
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            this.userManager = userManager;
         }
 
         public IEnumerable<NewsViewModel> GetAll()
@@ -222,10 +224,11 @@ namespace Course.ITnews.Domain.Services
             {
                 var tempLikes = unitOfWork.FindByCondition<Like>(x => x.CommentId == commentary.Id);
                 var resultLikes = mapper.Map<List<LikeViewModel>>(tempLikes);
+                var author = unitOfWork.FindByCondition<User>(x => x.Id == commentary.AuthorId.GetValueOrDefault());
                 if (commentary.NewsId == viewModel.Id)
                     commentaries.Add(new CommentaryViewModel()
                     {
-                        AuthorName = commentary.Author.UserName,
+                        AuthorName = author.FirstOrDefault().UserName,
                         AuthorId = commentary.AuthorId.GetValueOrDefault(),
                         Created = commentary.Created,
                         Description = commentary.Description,

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Course.ITnews.Web.Controllers
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         readonly RoleManager<IdentityRole<int>> _roleManager;

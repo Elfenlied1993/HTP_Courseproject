@@ -20,6 +20,8 @@
         <input asp-for="Id" type="hidden" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="Created" type="hidden" value="@DateTime.Now">
+        <input asp-for="Updated" type="hidden">
+
         <div class="form-group">
             <label asp-for="Title" class="control-label"></label>
             <input asp-for="Title" class="form-control" />
@@ -36,7 +38,8 @@
             <p>
                 <label asp-for="TagsTitles" class="control-label">Tags:</label>
                 <select asp-for="TagsTitles" class="js-example-tokenizer form-control" multiple="multiple" asp-items="Model.Tags"></select>
-                <span asp-validation-for="TagsTitles" class="text-danger"></span> </p>
+                <span asp-validation-for="TagsTitles" class="text-danger"></span>
+            </p>
         </div>
         <label asp-for="FullDescription" class="control-label">Enter your full description:</label>
         <textarea id="full-description" style="display: none" placeholder="*Write your text here*" asp-for="FullDescription"></textarea>

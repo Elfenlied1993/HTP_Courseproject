@@ -20,9 +20,11 @@
 <div class="col-md-12">
     <form asp-action="Edit">
         <input asp-for="Id" type="hidden" />
-        <input asp-for="AuthorId" type ="hidden" />
+        <input asp-for="AuthorId" type="hidden" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="Created" type="hidden" value="@DateTime.Now">
+        <input asp-for="Updated" type="hidden">
+
         <div class="form-group">
             <label asp-for="Title" class="control-label"></label>
             <input asp-for="Title" class="form-control" />

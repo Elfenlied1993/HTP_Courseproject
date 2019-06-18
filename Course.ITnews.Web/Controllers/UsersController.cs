@@ -80,48 +80,46 @@ namespace Course.ITnews.Web.Controllers
 
         [BindProperty]
         public InputModel Input { get; set; }
-
         public async Task<IActionResult> Edit(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                }
 
 
-            var genders = new List<string>
-            {
-                "Male",
-                "Female"
-            };
+                var genders = new List<string>
+                {
+                    "Male",
+                    "Female"
+                };
 
-            ViewData["Genders"] = new SelectList(genders);
-            var userName = await _userManager.GetUserNameAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            string file = null;
-            if (user.UserPhoto != null)
-            {
-                file = Convert.ToBase64String(user.UserPhoto);
-            }
+                ViewData["Genders"] = new SelectList(genders);
+                var userName = await _userManager.GetUserNameAsync(user);
+                var email = await _userManager.GetEmailAsync(user);
+                var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+                string file = null;
+                if (user.UserPhoto != null)
+                {
+                    file = Convert.ToBase64String(user.UserPhoto);
+                }
 
-            Username = userName;
+                Username = userName;
 
-            Input = new InputModel
-            {
-                Name = user.Name,
-                Country = user.Country,
-                DateOfBirth = user.DateOfBirth,
-                Gender = user.Gender,
-                Specialization = user.Specialization,
-                Photo = file,
-                Email = email,
-                PhoneNumber = phoneNumber
-            };
+                Input = new InputModel
+                {
+                    Name = user.Name,
+                    Country = user.Country,
+                    DateOfBirth = user.DateOfBirth,
+                    Gender = user.Gender,
+                    Specialization = user.Specialization,
+                    Photo = file,
+                    Email = email,
+                    PhoneNumber = phoneNumber
+                };
 
-            IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
-
+                IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
             return View(Input);
         }
         [HttpPost]

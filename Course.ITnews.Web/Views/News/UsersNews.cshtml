@@ -6,11 +6,16 @@
 }
 
 <h1>UsersNews</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-action="UsersNews" method="get">
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("admin")|| User.IsInRole("writer"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+    <form asp-action="UsersNews" method="get">
     <div class="form-actions no-color">
         <p>
             Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />

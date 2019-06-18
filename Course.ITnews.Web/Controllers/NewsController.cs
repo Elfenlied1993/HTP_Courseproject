@@ -53,7 +53,7 @@ namespace Course.ITnews.Web.Controllers
             commentaryService.Delete(id);
             return NoContent();
         }
-        [Authorize]
+        [Authorize(Roles = "admin,writer")]
         [HttpPost]
         public async Task<string> ChangeProfile(string id,string value,string username)
         {
@@ -131,31 +131,48 @@ namespace Course.ITnews.Web.Controllers
         [Authorize(Roles = "admin,writer")]
         public IActionResult Edit(int id)
         {
-            NewsViewModel viewModel = newsService.Get(id);
-            if (viewModel == null)
-            {
-                return NotFound();
-            }
-            PopPopulateLists(viewModel);
-            return View(viewModel);
+                var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var userRoles = userManager.GetRolesAsync(currentUser);
+
+                NewsViewModel viewModel = newsService.Get(id);
+                if (viewModel.Author == currentUser.UserName ||
+                    userRoles.ConfigureAwait(false).GetAwaiter().GetResult().Contains("admin"))
+                {
+                    if (viewModel == null)
+                    {
+                        return NotFound();
+                    }
+
+                    PopPopulateLists(viewModel);
+                }
+
+                return View(viewModel);
         }
-        [Authorize]
+        [Authorize(Roles = "admin,writer")]
         //POST News/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, NewsViewModel viewModel)
         {
+
             if (id != viewModel.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var currentUser = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var userRoles = userManager.GetRolesAsync(currentUser);
+            if (viewModel.Author == currentUser.UserName ||
+                userRoles.ConfigureAwait(false).GetAwaiter().GetResult().Contains("admin"))
             {
-                viewModel.Updated=DateTime.Now;
-                newsService.Edit(viewModel);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    viewModel.Updated = DateTime.Now;
+                    newsService.Edit(viewModel);
+                    return RedirectToAction("Index");
+                }
             }
+
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
@@ -168,7 +185,7 @@ namespace Course.ITnews.Web.Controllers
             PopPopulateLists(viewModel);
             return View(viewModel);
         }
-        [Authorize]
+        [Authorize(Roles = "admin,writer")]
         //POST News/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -209,7 +226,7 @@ namespace Course.ITnews.Web.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,writer")]
         public IActionResult Delete(int id)
         {
             var viewModel = newsService.Get(id);
